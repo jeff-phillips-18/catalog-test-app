@@ -1,0 +1,155 @@
+/**
+  Third Party / Dependency imports here
+*/
+$font-path: './fonts/';
+$img-path: './imgs/';
+$icon-font-path: './fonts/';
+
+/**
+  Patternfly Sass
+*/
+@import 'patternfly';
+
+/**
+  Patternfly React Specific Sass Extensions
+*/
+@import 'patternfly-react';
+
+/**
+  Patternfly React Specific Sass Extensions
+*/
+@import 'patternfly-react-extensions';
+
+/**
+  Application Overrides
+*/
+
+//override navbar-default from React Boostrap NavBar
+.navbar-default .navbar-toggle {
+  &:focus,
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.navbar-pf-vertical {
+  .nav .nav-item-iconic > .pficon-user {
+    padding-right: 7px;
+  }
+}
+
+.container-pf-nav-pf-vertical {
+  background: #f5f5f5;
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+.overview-list-icon {
+  width: 50px;
+}
+
+.blank-slate-pf {
+  &.full-page-blank-slate {
+    border: none;
+    background-color: #fff;
+    border: none;
+    height: 100%;
+    margin: 0 -20px;
+  }
+}
+$catalog-item-icon-size-lg: 40px;
+$catalog-item-icon-size-sm: 24px;
+
+.catalog-item-icon {
+  padding-right: 10px;
+
+  &__icon {
+    font-size: $catalog-item-icon-size-sm;
+
+    &--large {
+      font-size: $catalog-item-icon-size-lg;
+    }
+  }
+
+  &__img {
+    max-height: $catalog-item-icon-size-sm;
+    max-width: $catalog-item-icon-size-sm;
+
+    &[src$=".svg"] {
+      height: $catalog-item-icon-size-sm;
+    }
+
+    &--large {
+      max-height: $catalog-item-icon-size-lg;
+      max-width: $catalog-item-icon-size-lg;
+
+      &[src$=".svg"] {
+        height: $catalog-item-icon-size-lg;
+      }
+    }
+  }
+}
+
+.catalog-page {
+  background: #fff;
+  box-shadow: 0 0.0625rem 0.125rem 0 rgba(3,3,3,.2);
+  display: flex;
+  margin: 0 ($grid-gutter-width / 2);
+  padding: ($grid-gutter-width / 2) 0 0;
+
+  &__content {
+    flex: 1 1 auto;
+    margin: 0 ($grid-gutter-width / 2);
+  }
+
+  &__heading {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 0 20px;
+  }
+
+  &__num-items {
+    border-bottom: 1px solid $color-pf-black-500;
+    font-weight: 700;
+    margin: 0 0 $grid-gutter-width 0;
+    padding: 0 0 20px;
+  }
+
+  &__tabs {
+    flex: 0 0 170px;
+    margin: 0 ($grid-gutter-width / 2) 0 0;
+  }
+
+  &__no-filter-results {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    &-title {
+      color: $color-pf-black-700;
+      font-size: 18px;
+    }
+  }
+}
+
+.catalog-modal {
+  &__body {
+    display: flex;
+  }
+
+  &__item-header {
+    float: left;
+  }
+
+  &__description {
+    flex: 1;
+    padding-left: 20px;
+  }
+
+  &__subscribe {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+}
