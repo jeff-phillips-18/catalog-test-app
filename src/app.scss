@@ -134,6 +134,10 @@ $catalog-item-icon-size-sm: 24px;
   }
 }
 
+.catalog-create-instance {
+  background-color: #fff;
+}
+
 .catalog-modal {
   &__body {
     display: flex;
@@ -151,5 +155,75 @@ $catalog-item-icon-size-sm: 24px;
   &__subscribe {
     margin-bottom: 20px;
     width: 100%;
+  }
+  &__footer {
+    border-top: 1px solid $color-pf-black-200
+  }
+}
+
+.catalog-create-instance-form {
+  width: 50%;
+  border-right: 1px solid $color-pf-black-300;
+}
+
+.catalog-form-control.form-control[readonly] {
+  background-color: $color-pf-white;
+  border: 0;
+  color: inherit;
+  font-weight: 700;
+  &[type=textarea] {
+    resize: none;
+  }
+}
+
+.catalog-dropdownselect {
+  .dropdown {
+    border-width: 0;
+    display: flex;
+    padding: 0;
+    width: 100%;
+
+    .dropdown-menu {
+      width: 100%;
+    }
+    .dropdown-toggle.btn {
+      text-align: left;
+      width: 100%;
+    }
+    .dropdown-toggle.btn {
+      > span:first-child {
+        width: 92%;
+      }
+      > span {
+        display:inline-block;
+      }
+    }
+
+    .catalog-dropdownselect-menuitem {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .catalog-dropdownselect-menuitem-selected,
+    .catalog-dropdownselect-menuitem-selected:hover,
+    .catalog-dropdownselect-menuitem-selected:focus {
+      background-color: $color-pf-blue-400;
+      border-width: 0;
+      color: $color-pf-white;
+
+      > a, > a:focus {
+        background-color: inherit;
+        border-color: $color-pf-blue-400;
+        color: inherit;
+        outline: inherit;
+      }
+    }
+    .catalog-dropdownselect-menuitemname {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .catalog-dropdownselect-menuitemcheck {
+      padding-right: 5px;
+      text-align: right;
+    }
   }
 }

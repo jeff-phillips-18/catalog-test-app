@@ -20,11 +20,7 @@ const fetchCatalogItems = params => dispatch => {
   );
 };
 
-const createCatalogInstance = (name, item) => dispatch => {
-  const instance = {
-    instanceName: name,
-    ...item
-  };
+const createCatalogInstance = item => dispatch => {
   dispatch({
     type: helpers.PENDING_ACTION(catalogConstants.CREATE_CATALOG_INSTANCE)
   });
@@ -36,7 +32,7 @@ const createCatalogInstance = (name, item) => dispatch => {
         ),
         payload: {
           data: {
-            item: instance
+            item
           }
         }
       }),
@@ -44,8 +40,39 @@ const createCatalogInstance = (name, item) => dispatch => {
   );
 };
 
-const catalogActions = {
-  fetchCatalogItems
+const showCreateCatalogInstance = item => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.SHOW_CREATE_INSTANCE,
+        payload: { item }
+      }),
+    10
+  );
 };
 
-export { catalogActions, fetchCatalogItems, createCatalogInstance };
+const hideCreateCatalogInstance = () => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.HIDE_CREATE_INSTANCE,
+        payload: { item: null }
+      }),
+    10
+  );
+};
+
+const catalogActions = {
+  fetchCatalogItems,
+  createCatalogInstance,
+  showCreateCatalogInstance,
+  hideCreateCatalogInstance
+};
+
+export {
+  catalogActions,
+  fetchCatalogItems,
+  createCatalogInstance,
+  showCreateCatalogInstance,
+  hideCreateCatalogInstance
+};

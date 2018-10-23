@@ -4,36 +4,33 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as _ from 'lodash-es';
 
-import { CatalogItemHeader } from 'patternfly-react-extensions/dist/esm/components/CatalogItemHeader';
 import { CatalogTileView } from 'patternfly-react-extensions/dist/esm/components/CatalogTileView';
 import { CatalogTile } from 'patternfly-react-extensions/dist/esm/components/CatalogTile';
 import { VerticalTabs } from 'patternfly-react-extensions/dist/esm/components/VerticalTabs';
 import { FilterSidePanel } from 'patternfly-react-extensions/dist/esm/components/FilterSidePanel';
-import {
-  PropertiesSidePanel,
-  PropertyItem
-} from 'patternfly-react-extensions/dist/esm/components/PropertiesSidePanel';
 import { Alert } from 'patternfly-react/dist/esm/components/Alert';
-import { Button } from 'patternfly-react/dist/esm/components/Button';
 import { EmptyState } from 'patternfly-react/dist/esm/components/EmptyState';
 import { Modal } from 'patternfly-react/dist/esm/components/Modal';
 import FormControl from 'patternfly-react/dist/esm/components/Form/FormControl';
 
 import { helpers } from '../common/helpers';
+
 import {
   fetchCatalogItems,
-  createCatalogInstance
+  showCreateCatalogInstance
 } from '../redux/actions/catalogActions';
 import {
   normalizeIconClass,
   getImageForIconClass
-} from '../utils/CatalogItemIcon';
+} from '../utils/catalogItemIcon';
 import {
   categorizeItems,
   recategorizeItems
-} from '../utils/CategorizeCatalogItems';
+} from '../utils/categorizeCatalogItems';
+import CatalogItemDetailsDialog from '../components/catalogItemDetailsDialog';
+import CatalogItemCreateInstanceDialog from '../components/catalogItemCreateInstanceDialog';
 
-class Catalog extends React.Component {
+class CatalogView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -69,7 +66,9 @@ class Catalog extends React.Component {
       filters,
       filterCounts,
       showAllItemsForCategory: null,
-      modalOpen: false
+      detailsItem: null,
+      showDetails: false,
+      showCreateInstance: false
     };
 
     if (_.size(props.catalogItems)) {
@@ -88,7 +87,9 @@ class Catalog extends React.Component {
         activeTabs,
         filters,
         filterCounts,
-        modalOpen: false
+        detailsItem: null,
+        showDetails: false,
+        showCreateInstance: false
       });
     }
   }
@@ -99,7 +100,7 @@ class Catalog extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { catalogItems, instanceCreated } = this.props;
-    const { filters, filterCounts, activeTabs, categories } = this.state;
+    const { filters, filterCounts, activeTabs } = this.state;
 
     if (instanceCreated && !prevProps.instanceCreated) {
       this.props.history.push('/');
@@ -107,42 +108,24 @@ class Catalog extends React.Component {
 
     if (catalogItems !== prevProps.catalogItems) {
       const newCategories = categorizeItems(catalogItems);
-      this.setState(this.getCategoryState(activeTabs, newCategories));
-      if (this.hasActiveFilters(filters)) {
-        const filteredItems = this.filterItems(catalogItems);
-        const filteredCategories = recategorizeItems(
-          filteredItems,
+      const filteredItems = this.filterItems(catalogItems, filters);
+      const filteredCategories = recategorizeItems(
+        filteredItems,
+        newCategories
+      );
+      this.setState({
+        ...this.getCategoryState(activeTabs, filteredCategories),
+        ...this.getFilterCounts(
+          activeTabs,
+          filters,
+          filterCounts,
           newCategories
-        );
-        this.setState(this.getCategoryState(activeTabs, filteredCategories));
-      }
-      this.setState(
-        this.getFilterCounts(activeTabs, filters, filterCounts, newCategories)
-      );
-    }
-
-    if (filters !== prevState.filters) {
-      const filteredItems = this.filterItems(catalogItems);
-      const newCategories = recategorizeItems(filteredItems, categories);
-      this.setState(this.getCategoryState(activeTabs, newCategories));
-    }
-
-    if (activeTabs !== prevState.activeTabs) {
-      this.setState(this.getCategoryState(activeTabs, categories));
-    }
-
-    // filter counts are updated when new Category tab is selected or filter by name changed
-    if (
-      activeTabs !== prevState.activeTabs ||
-      prevState.filters.byName !== filters.byName
-    ) {
-      this.setState(
-        this.getFilterCounts(activeTabs, filters, filterCounts, categories)
-      );
+        )
+      });
     }
   }
 
-  refresh(props) {
+  refresh() {
     this.props.fetchCatalogItems();
   }
 
@@ -267,18 +250,18 @@ class Catalog extends React.Component {
   }
 
   syncTabsAndTiles(category, parentCategory) {
-    const { categories } = this.state;
+    const { categories, currentCategories, filters, filterCounts } = this.state;
     if (!parentCategory && category === 'all') {
+      const activeTabs = [category];
       this.setState({
-        activeTabs: [category],
-        currentCategories: categories,
+        activeTabs,
+        ...this.getCategoryState(activeTabs, categories),
+        ...this.getFilterCounts(activeTabs, filters, filterCounts, categories),
         numItems: _.first(categories).numItems,
         showAllItemsForCategory: null
       });
-      return;
     }
 
-    const { currentCategories } = this.state;
     const tmpCategories = parentCategory ? currentCategories : categories;
     const activeCategory = _.find(tmpCategories, { id: category });
     if (!activeCategory) {
@@ -286,24 +269,15 @@ class Catalog extends React.Component {
     }
 
     const { numItems, subcategories } = activeCategory;
-    const state = {
-      activeTabs: parentCategory ? [parentCategory, category] : [category],
-      numItems: numItems || 0
-    };
-    if (_.isEmpty(subcategories)) {
-      // no sub-categories, show all items for selected category
-      _.assign(state, {
-        currentCategories: categories,
-        showAllItemsForCategory: category
-      });
-    } else {
-      // show list of sub-categories
-      _.assign(state, {
-        currentCategories: subcategories,
-        showAllItemsForCategory: null
-      });
-    }
-    this.setState(state);
+    const activeTabs = parentCategory ? [parentCategory, category] : [category];
+
+    this.setState({
+      activeTabs,
+      ...this.getCategoryState(activeTabs, categories),
+      ...this.getFilterCounts(activeTabs, filters, filterCounts, categories),
+      numItems: numItems || 0,
+      showAllItemsForCategory: _.isEmpty(subcategories) ? category : null
+    });
   }
 
   onActivateTab(tabs) {
@@ -312,13 +286,32 @@ class Catalog extends React.Component {
     this.syncTabsAndTiles(category, parent);
   }
 
-  showItemDetails(item) {
-    this.setState({ detailsItem: item });
-  }
+  showItemDetails = item => {
+    this.setState({ detailsItem: item, showDetails: true });
+  };
 
-  hideItemDetails() {
-    this.setState({ detailsItem: null });
-  }
+  hideItemDetails = () => {
+    this.setState({ showDetails: false });
+  };
+
+  showCreateItemInstance = () => {
+    const { detailsItem } = this.state;
+    const { history, dialogForm } = this.props;
+
+    if (dialogForm) {
+      this.setState({
+        showDetails: false,
+        showCreateInstance: true
+      });
+      return;
+    }
+    this.props.showCreateCatalogInstance(detailsItem);
+    history.push('/');
+  };
+
+  hideCreateItemInstance = () => {
+    this.setState({ showCreateInstance: false });
+  };
 
   renderCategoryTiles(category) {
     const { showAllItemsForCategory } = this.state;
@@ -363,9 +356,7 @@ class Catalog extends React.Component {
     return _.get(_.find(categories, { id: categoryID }), 'label');
   }
 
-  filterItems() {
-    const { catalogItems } = this.props;
-    const { filters } = this.state;
+  filterItems(catalogItems, filters) {
     const { byName, byType } = filters;
 
     if (!this.hasActiveFilters(filters)) {
@@ -424,19 +415,24 @@ class Catalog extends React.Component {
   }
 
   onFilterChange(filterType, id, value) {
-    const filters = _.cloneDeep(this.state.filters);
+    const { catalogItems } = this.props;
+    const { filters, activeTabs, categories } = this.state;
+
+    const newFilters = _.cloneDeep(filters);
     if (filterType === 'byName') {
       const active = !!value;
-      filters[filterType] = { active, value };
+      newFilters[filterType] = { active, value };
     } else {
-      filters[filterType][id].active = value;
+      newFilters[filterType][id].active = value;
     }
-    this.setState({ filters });
-  }
 
-  createInstance = (name, item) => {
-    this.props.createCatalogInstance(name, item);
-  };
+    const filteredItems = this.filterItems(catalogItems, newFilters);
+    const newCategories = recategorizeItems(filteredItems, categories);
+    this.setState({
+      filters: newFilters,
+      ...this.getCategoryState(activeTabs, newCategories)
+    });
+  }
 
   renderPendingMessage = () => {
     const { pending } = this.props;
@@ -476,7 +472,9 @@ class Catalog extends React.Component {
       numItems,
       filters,
       filterCounts,
-      detailsItem
+      detailsItem,
+      showDetails,
+      showCreateInstance
     } = this.state;
     const { clusterServiceClass, imageStream } = filters.byType;
     const { clusterServiceClasses, imageStreams } = filterCounts.byType;
@@ -486,9 +484,6 @@ class Catalog extends React.Component {
     const heading = activeCategory
       ? activeCategory.label
       : this.getCategoryLabel(_.first(activeTabs));
-    const notAvailable = (
-      <span className="properties-side-panel-pf-property-label">N/A</span>
-    );
 
     if (error) {
       return this.renderError();
@@ -498,204 +493,148 @@ class Catalog extends React.Component {
       return this.renderPendingMessage();
     }
     return (
-      <div>
-        <div className="page-header">
-          <h1>Catalog</h1>
+      <div className="catalog-page">
+        <div className="catalog-page__tabs">
+          {this.renderCategoryTabs()}
+          <FilterSidePanel>
+            <FilterSidePanel.Category onSubmit={e => e.preventDefault()}>
+              <FormControl
+                type="text"
+                inputRef={ref => {
+                  this.filterByNameInput = ref;
+                }}
+                placeholder="Filter by name..."
+                bsClass="form-control"
+                value={filters.byName.value}
+                autoFocus
+                onChange={e =>
+                  this.onFilterChange('byName', null, e.target.value)
+                }
+              />
+            </FilterSidePanel.Category>
+            <FilterSidePanel.Category title="Type">
+              <FilterSidePanel.CategoryItem
+                count={clusterServiceClasses}
+                checked={clusterServiceClass.active}
+                onChange={e =>
+                  this.onFilterChange(
+                    'byType',
+                    'clusterServiceClass',
+                    e.target.checked
+                  )
+                }
+              >
+                {clusterServiceClass.label}
+              </FilterSidePanel.CategoryItem>
+              <FilterSidePanel.CategoryItem
+                count={imageStreams}
+                checked={imageStream.active}
+                onChange={e =>
+                  this.onFilterChange('byType', 'imageStream', e.target.checked)
+                }
+              >
+                {imageStream.label}
+              </FilterSidePanel.CategoryItem>
+            </FilterSidePanel.Category>
+          </FilterSidePanel>
         </div>
-        <div className="catalog-page">
-          <div className="catalog-page__tabs">
-            {this.renderCategoryTabs()}
-            <FilterSidePanel>
-              <FilterSidePanel.Category onSubmit={e => e.preventDefault()}>
-                <FormControl
+        <div className="catalog-page__content">
+          <div>
+            <div className="catalog-page__heading">{heading}</div>
+            <div className="catalog-page__num-items">{numItems} items</div>
+          </div>
+          {numItems > 0 && (
+            <CatalogTileView>
+              {activeCategory
+                ? this.renderCategoryTiles(activeCategory)
+                : _.map(
+                    currentCategories,
+                    category =>
+                      category.numItems && category.id !== 'all'
+                        ? this.renderCategoryTiles(category)
+                        : null
+                  )}
+            </CatalogTileView>
+          )}
+          {numItems === 0 && (
+            <EmptyState className="catalog-page__no-filter-results">
+              <EmptyState.Title
+                className="catalog-page__no-filter-results-title"
+                aria-level="2"
+              >
+                No Results Match the Filter Criteria
+              </EmptyState.Title>
+              <EmptyState.Info className="text-secondary">
+                No catalog items are being shown due to the filters being
+                applied.
+              </EmptyState.Info>
+              <EmptyState.Help>
+                <button
                   type="text"
-                  inputRef={ref => {
-                    this.filterByNameInput = ref;
-                  }}
-                  placeholder="Filter by name..."
-                  bsClass="form-control"
-                  value={filters.byName.value}
-                  autoFocus
-                  onChange={e =>
-                    this.onFilterChange('byName', null, e.target.value)
-                  }
-                />
-              </FilterSidePanel.Category>
-              <FilterSidePanel.Category title="Type">
-                <FilterSidePanel.CategoryItem
-                  count={clusterServiceClasses}
-                  checked={clusterServiceClass.active}
-                  onChange={e =>
-                    this.onFilterChange(
-                      'byType',
-                      'clusterServiceClass',
-                      e.target.checked
-                    )
-                  }
+                  className="btn btn-link"
+                  onClick={() => this.clearFilters()}
                 >
-                  {clusterServiceClass.label}
-                </FilterSidePanel.CategoryItem>
-                <FilterSidePanel.CategoryItem
-                  count={imageStreams}
-                  checked={imageStream.active}
-                  onChange={e =>
-                    this.onFilterChange(
-                      'byType',
-                      'imageStream',
-                      e.target.checked
-                    )
-                  }
-                >
-                  {imageStream.label}
-                </FilterSidePanel.CategoryItem>
-              </FilterSidePanel.Category>
-            </FilterSidePanel>
-          </div>
-          <div className="catalog-page__content">
-            <div>
-              <div className="catalog-page__heading">{heading}</div>
-              <div className="catalog-page__num-items">{numItems} items</div>
-            </div>
-            {numItems > 0 && (
-              <CatalogTileView>
-                {activeCategory
-                  ? this.renderCategoryTiles(activeCategory)
-                  : _.map(
-                      currentCategories,
-                      category =>
-                        category.numItems && category.id !== 'all'
-                          ? this.renderCategoryTiles(category)
-                          : null
-                    )}
-              </CatalogTileView>
+                  Clear All Filters
+                </button>
+              </EmptyState.Help>
+            </EmptyState>
+          )}
+          {detailsItem &&
+            showDetails && (
+              <CatalogItemDetailsDialog
+                detailsItem={detailsItem}
+                onClose={this.hideItemDetails}
+                onShowCreateInstance={this.showCreateItemInstance}
+              />
             )}
-            {numItems === 0 && (
-              <EmptyState className="catalog-page__no-filter-results">
-                <EmptyState.Title
-                  className="catalog-page__no-filter-results-title"
-                  aria-level="2"
-                >
-                  No Results Match the Filter Criteria
-                </EmptyState.Title>
-                <EmptyState.Info className="text-secondary">
-                  No catalog items are being shown due to the filters being
-                  applied.
-                </EmptyState.Info>
-                <EmptyState.Help>
-                  <button
-                    type="text"
-                    className="btn btn-link"
-                    onClick={() => this.clearFilters()}
-                  >
-                    Clear All Filters
-                  </button>
-                </EmptyState.Help>
-              </EmptyState>
+          {detailsItem &&
+            showCreateInstance && (
+              <CatalogItemCreateInstanceDialog
+                detailsItem={detailsItem}
+                onClose={this.hideCreateItemInstance}
+              />
             )}
-            {detailsItem && (
-              <Modal show className="right-side-modal-pf" bsSize="lg">
-                <Modal.Header>
-                  <Modal.CloseButton onClick={() => this.hideItemDetails()} />
-                  <CatalogItemHeader
-                    className="catalog-modal__item-header"
-                    iconImg={getImageForIconClass(detailsItem.tileImgUrl)}
-                    title={detailsItem.name}
-                    vendor={<span> {detailsItem.tileProvider}</span>}
-                  />
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="catalog-modal__body">
-                    <PropertiesSidePanel>
-                      <Button
-                        bsStyle="primary"
-                        className="catalog-modal__subscribe"
-                        onClick={() => this.createInstance('Jeff', detailsItem)}
-                      >
-                        Create Instance
-                      </Button>
-                      <PropertyItem
-                        label="Operator Version"
-                        value={detailsItem.version || notAvailable}
-                      />
-                      <PropertyItem
-                        label="Certified Level"
-                        value={detailsItem.certifiedLevel || notAvailable}
-                      />
-                      <PropertyItem
-                        label="Provider"
-                        value={detailsItem.provider || notAvailable}
-                      />
-                      <PropertyItem
-                        label="Health Index"
-                        value={detailsItem.healthIndex || notAvailable}
-                      />
-                      <PropertyItem
-                        label="Repository"
-                        value={detailsItem.repository || notAvailable}
-                      />
-                      <PropertyItem
-                        label="Container Image"
-                        value={detailsItem.containerImage || notAvailable}
-                      />
-                      <PropertyItem
-                        label="Created At"
-                        value={detailsItem.createdAt || notAvailable}
-                      />
-                      <PropertyItem
-                        label="Support"
-                        value={detailsItem.support || notAvailable}
-                      />
-                    </PropertiesSidePanel>
-                    <div className="catalog-modal__item catalog-modal__description">
-                      {detailsItem.description}
-                    </div>
-                  </div>
-                </Modal.Body>
-              </Modal>
-            )}
-            {this.props.creatingInstance && (
-              <Modal show bsSize="sm">
-                <Modal.Body>Creating...</Modal.Body>
-              </Modal>
-            )}
-          </div>
+          {this.props.creatingInstance && (
+            <Modal show bsSize="sm">
+              <Modal.Body>Creating...</Modal.Body>
+            </Modal>
+          )}
         </div>
       </div>
     );
   }
 }
 
-Catalog.propTypes = {
+CatalogView.propTypes = {
   catalogItems: PropTypes.array,
   error: PropTypes.bool,
   errorMessage: PropTypes.string,
   pending: PropTypes.bool,
-  fulfilled: PropTypes.bool,
   creatingInstance: PropTypes.bool,
   instanceCreated: PropTypes.bool,
+  dialogForm: PropTypes.bool,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
   fetchCatalogItems: PropTypes.func,
-  createCatalogInstance: PropTypes.func
+  showCreateCatalogInstance: PropTypes.func
 };
 
-Catalog.defaultProps = {
+CatalogView.defaultProps = {
   catalogItems: [],
   error: false,
   errorMessage: '',
   pending: false,
-  fulfilled: false,
   creatingInstance: false,
   instanceCreated: false,
+  dialogForm: true,
   fetchCatalogItems: helpers.noop,
-  createCatalogInstance: helpers.noop
+  showCreateCatalogInstance: helpers.noop
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchCatalogItems: () => dispatch(fetchCatalogItems()),
-  createCatalogInstance: (name, item) =>
-    dispatch(createCatalogInstance(name, item))
+  showCreateCatalogInstance: item => dispatch(showCreateCatalogInstance(item))
 });
 
 const mapStateToProps = function(state) {
@@ -708,4 +647,4 @@ const mapStateToProps = function(state) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Catalog);
+)(CatalogView);

@@ -15,11 +15,41 @@ const initialState = {
     pending: false,
     fulfilled: false,
     catalogInstances: []
+  },
+  creatingInstance: {
+    shown: false,
+    creatingItem: null
   }
 };
 
 const catalogReducer = function(state = initialState, action) {
   switch (action.type) {
+    case catalogConstants.SHOW_CREATE_INSTANCE:
+      return helpers.setStateProp(
+        'creatingInstance',
+        {
+          shown: true,
+          creatingItem: action.payload.item
+        },
+        {
+          state,
+          initialState
+        }
+      );
+
+    case catalogConstants.HIDE_CREATE_INSTANCE:
+      return helpers.setStateProp(
+        'creatingInstance',
+        {
+          shown: false,
+          creatingItem: null
+        },
+        {
+          state,
+          initialState
+        }
+      );
+
     case helpers.REJECTED_ACTION(catalogConstants.GET_CATLOG_ITEMS):
       return helpers.setStateProp(
         'calalogItems',

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const description = (
   <div>
-    <h2> Lorem ipsum</h2>
+    <h2>Lorem ipsum</h2>
     Praesent sagittis est et arcu fringilla placerat. Cras erat ante, dapibus
     non mauris ac, volutpat sollicitudin ligula. Morbi gravida nisl vel risus
     tempor, sit amet luctus erat tempus. Curabitur blandit sem non pretium

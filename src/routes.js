@@ -1,7 +1,7 @@
-import Overview from './components/overview';
-import Catalog from './components/catalog';
-import Marketplace from './components/marketplace';
-import Administration from './components/administration';
+import Overview from './pages/overview/overview';
+import Catalog from './pages/catalog/catalog';
+import Marketplace from './pages/marketplace/marketplace';
+import Administration from './pages/administration/administration';
 
 const baseName = '/';
 
