@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import CatalogItemHeader from 'patternfly-react-extensions/dist/esm/components/CatalogItemHeader/CatalogItemHeader';
 import { Grid } from 'patternfly-react/dist/esm/components/Grid';
 import { Button } from 'patternfly-react/dist/esm/components/Button';
-import Modal from 'patternfly-react/dist/esm/components/Modal/Modal';
+import { Modal } from 'patternfly-react/dist/esm/components/Modal';
+import { ExpandCollapse } from 'patternfly-react/dist/esm/components/ExpandCollapse';
 
 import { getImageForIconClass } from '../../utils/catalogItemIcon';
 import {
@@ -66,12 +67,7 @@ class CreateInstance extends React.Component {
     return (
       <Grid.Row className="catalog-create-instance">
         <Modal.Header>
-          <CatalogItemHeader
-            className="catalog-modal__item-header"
-            iconImg={getImageForIconClass(createItem.imgUrl)}
-            title={createItem.name}
-            vendor={<span> {createItem.provider}</span>}
-          />
+          <h2>Create Catalog Instance</h2>
         </Modal.Header>
         <Modal.Body className="catalog-modal__body">
           <Grid fluid className="catalog-create-instance-form">
@@ -82,7 +78,24 @@ class CreateInstance extends React.Component {
             />
           </Grid>
           <div className="catalog-modal__item catalog-modal__description">
-            {createItem.description}
+            <div className="catalog-modal__description__header">
+              <CatalogItemHeader
+                className="catalog-modal__item-header"
+                iconImg={getImageForIconClass(createItem.imgUrl)}
+                title={createItem.name}
+                vendor={<span> {createItem.provider}</span>}
+              />
+            </div>
+            {createItem.shortDescription}
+            <ExpandCollapse
+              className="catalog-modal__long-description"
+              align="center"
+              bordered
+              textCollapsed="More Information"
+              textExpanded="Less Information"
+            >
+              {createItem.description}
+            </ExpandCollapse>
           </div>
         </Modal.Body>
         <Modal.Footer className="catalog-modal__footer">
