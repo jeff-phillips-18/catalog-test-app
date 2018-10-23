@@ -95,13 +95,16 @@ const Overview = ({ catalogInstances, createShown, createItem, history }) => {
     </div>
   );
 
-  const renderCreateInstance = () => <CreateInstance creatingItem={createItem} history={history} />;
+  const renderCreateInstance = () => (
+    <CreateInstance creatingItem={createItem} history={history} />
+  );
 
   return createShown ? renderCreateInstance() : renderOverview();
 };
 
 Overview.propTypes = {
   catalogInstances: PropTypes.array,
+  createShown: PropTypes.bool,
   createItem: PropTypes.object,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
@@ -110,14 +113,14 @@ Overview.propTypes = {
 
 Overview.defaultProps = {
   catalogInstances: [],
+  createShown: false,
   createItem: null
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, state.catalog.catalogInstances, {
-    createShown: state.catalog.creatingInstance.shown,
-    createItem: state.catalog.creatingInstance.creatingItem
-  });
-};
+const mapStateToProps = state => ({
+  ...state.catalog.catalogInstances,
+  createShown: state.catalog.creatingInstance.shown,
+  createItem: state.catalog.creatingInstance.creatingItem
+});
 
 export default connect(mapStateToProps)(Overview);

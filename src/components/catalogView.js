@@ -8,17 +8,13 @@ import { CatalogTileView } from 'patternfly-react-extensions/dist/esm/components
 import { CatalogTile } from 'patternfly-react-extensions/dist/esm/components/CatalogTile';
 import { VerticalTabs } from 'patternfly-react-extensions/dist/esm/components/VerticalTabs';
 import { FilterSidePanel } from 'patternfly-react-extensions/dist/esm/components/FilterSidePanel';
-import { Alert } from 'patternfly-react/dist/esm/components/Alert';
 import { EmptyState } from 'patternfly-react/dist/esm/components/EmptyState';
 import { Modal } from 'patternfly-react/dist/esm/components/Modal';
 import FormControl from 'patternfly-react/dist/esm/components/Form/FormControl';
 
 import { helpers } from '../common/helpers';
 
-import {
-  fetchCatalogItems,
-  showCreateCatalogInstance
-} from '../redux/actions/catalogActions';
+import { showCreateCatalogInstance } from '../redux/actions/catalogActions';
 import {
   normalizeIconClass,
   getImageForIconClass
@@ -94,11 +90,7 @@ class CatalogView extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.refresh();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { catalogItems, instanceCreated } = this.props;
     const { filters, filterCounts, activeTabs } = this.state;
 
@@ -123,10 +115,6 @@ class CatalogView extends React.Component {
         )
       });
     }
-  }
-
-  refresh() {
-    this.props.fetchCatalogItems();
   }
 
   hasActiveFilters = filters => {
@@ -287,6 +275,12 @@ class CatalogView extends React.Component {
   }
 
   showItemDetails = item => {
+    const { noDetails } = this.props;
+
+    if (noDetails) {
+      this.props.showCreateCatalogInstance(item);
+      return;
+    }
     this.setState({ detailsItem: item, showDetails: true });
   };
 
@@ -296,17 +290,19 @@ class CatalogView extends React.Component {
 
   showCreateItemInstance = () => {
     const { detailsItem } = this.state;
-    const { history, dialogForm } = this.props;
+    const { dialogForm } = this.props;
 
     if (dialogForm) {
+      const createItem = helpers.createDefaultInstance(detailsItem);
+
       this.setState({
         showDetails: false,
-        showCreateInstance: true
+        showCreateInstance: true,
+        createItem
       });
       return;
     }
     this.props.showCreateCatalogInstance(detailsItem);
-    history.push('/');
   };
 
   hideCreateItemInstance = () => {
@@ -434,37 +430,7 @@ class CatalogView extends React.Component {
     });
   }
 
-  renderPendingMessage = () => {
-    const { pending } = this.props;
-    if (pending) {
-      return (
-        <Modal bsSize="lg" backdrop={false} show animation={false}>
-          <Modal.Body>
-            <div className="spinner spinner-xl" />
-            <div className="text-center">Loading catalog items...</div>
-          </Modal.Body>
-        </Modal>
-      );
-    }
-
-    return null;
-  };
-
-  renderError() {
-    const { errorMessage } = this.props;
-
-    return (
-      <EmptyState>
-        <Alert type="error">
-          <span>Error retrieving catalog items: {errorMessage}</span>
-        </Alert>
-        {this.renderPendingMessage()}
-      </EmptyState>
-    );
-  }
-
   render() {
-    const { error, pending } = this.props;
     const {
       activeTabs,
       showAllItemsForCategory,
@@ -474,7 +440,8 @@ class CatalogView extends React.Component {
       filterCounts,
       detailsItem,
       showDetails,
-      showCreateInstance
+      showCreateInstance,
+      createItem
     } = this.state;
     const { clusterServiceClass, imageStream } = filters.byType;
     const { clusterServiceClasses, imageStreams } = filterCounts.byType;
@@ -485,15 +452,8 @@ class CatalogView extends React.Component {
       ? activeCategory.label
       : this.getCategoryLabel(_.first(activeTabs));
 
-    if (error) {
-      return this.renderError();
-    }
-
-    if (pending) {
-      return this.renderPendingMessage();
-    }
     return (
-      <div className="catalog-page">
+      <div className="catalog-page col-xs-12">
         <div className="catalog-page__tabs">
           {this.renderCategoryTabs()}
           <FilterSidePanel>
@@ -590,7 +550,7 @@ class CatalogView extends React.Component {
           {detailsItem &&
             showCreateInstance && (
               <CatalogItemCreateInstanceDialog
-                detailsItem={detailsItem}
+                detailsItem={createItem}
                 onClose={this.hideCreateItemInstance}
               />
             )}
@@ -607,42 +567,33 @@ class CatalogView extends React.Component {
 
 CatalogView.propTypes = {
   catalogItems: PropTypes.array,
-  error: PropTypes.bool,
-  errorMessage: PropTypes.string,
-  pending: PropTypes.bool,
   creatingInstance: PropTypes.bool,
   instanceCreated: PropTypes.bool,
+  noDetails: PropTypes.bool,
   dialogForm: PropTypes.bool,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
-  fetchCatalogItems: PropTypes.func,
   showCreateCatalogInstance: PropTypes.func
 };
 
 CatalogView.defaultProps = {
   catalogItems: [],
-  error: false,
-  errorMessage: '',
-  pending: false,
   creatingInstance: false,
   instanceCreated: false,
-  dialogForm: true,
-  fetchCatalogItems: helpers.noop,
+  noDetails: false,
+  dialogForm: false,
   showCreateCatalogInstance: helpers.noop
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchCatalogItems: () => dispatch(fetchCatalogItems()),
+const mapDispatchToProps = dispatch => ({
   showCreateCatalogInstance: item => dispatch(showCreateCatalogInstance(item))
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, state.catalog.catalogItems, {
-    creatingInstance: state.catalog.catalogInstances.pending,
-    instanceCreated: state.catalog.catalogInstances.fulfilled
-  });
-};
+const mapStateToProps = state => ({
+  creatingInstance: state.catalog.catalogInstances.pending,
+  instanceCreated: state.catalog.catalogInstances.fulfilled
+});
 
 export default connect(
   mapStateToProps,

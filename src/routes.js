@@ -1,6 +1,7 @@
 import Overview from './pages/overview/overview';
-import Catalog from './pages/catalog/catalog';
-import Marketplace from './pages/marketplace/marketplace';
+import CatalogA from './pages/catalogA/catalogA';
+import CatalogB from './pages/catalogB/catalogB';
+import CatalogC from './pages/catalogC/catalogC';
 import Administration from './pages/administration/administration';
 
 const baseName = '/';
@@ -14,15 +15,21 @@ const routes = () => [
   },
   {
     iconClass: 'fa fa-star',
-    title: 'Catalog',
+    title: 'Catalog A',
     to: '/catalog',
-    component: Catalog
+    component: CatalogA
   },
   {
     iconClass: 'fa fa-bell',
-    title: 'Marketplace',
-    to: '/marketplace',
-    component: Marketplace
+    title: 'Catalog B',
+    to: '/catalog-b',
+    component: CatalogB
+  },
+  {
+    iconClass: 'fa fa-bell',
+    title: 'Catalog C',
+    to: '/catalog-c',
+    component: CatalogC
   },
   {
     iconClass: 'fa fa-cog',

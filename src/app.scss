@@ -97,7 +97,6 @@ $catalog-item-icon-size-sm: 24px;
   background: #fff;
   box-shadow: 0 0.0625rem 0.125rem 0 rgba(3,3,3,.2);
   display: flex;
-  margin: 0 ($grid-gutter-width / 2);
   padding: ($grid-gutter-width / 2) 0 0;
 
   &__content {
@@ -136,6 +135,21 @@ $catalog-item-icon-size-sm: 24px;
 
 .catalog-create-instance {
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+}
+
+.catalog-create-instance-dialog {
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.catalog-modal__body {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .catalog-modal {

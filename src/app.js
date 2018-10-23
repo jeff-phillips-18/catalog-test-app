@@ -17,6 +17,8 @@ import {
 import pfLogo from 'patternfly/dist/img/logo-alt.svg';
 import pfBrand from 'patternfly/dist/img/brand-alt.svg';
 import { routes } from './routes';
+import ConfirmationModal from './components/confirmationModal';
+
 import './app.css';
 
 class App extends React.Component {
@@ -136,6 +138,7 @@ class App extends React.Component {
           {vertNavItems}
         </VerticalNav>
         <Grid fluid className="container-pf-nav-pf-vertical">
+          <ConfirmationModal key="confirmationModal" />
           {this.renderContent()}
         </Grid>
       </React.Fragment>

@@ -7,35 +7,21 @@ import { Form, Radio } from 'patternfly-react/dist/esm/components/Form';
 import { Grid } from 'patternfly-react/dist/esm/components/Grid';
 import { MenuItem } from 'patternfly-react/dist/esm/components/MenuItem';
 
-const fakeNamespaces = [
-  'default',
-  'development',
-  'my-project',
-  'production',
-  'qa',
-  'test-project'
-];
+import { helpers } from '../common/helpers';
 
-const defaultItem = {
-  instanceName: '',
-  namespace: fakeNamespaces[0],
-  plan: 'Plan 1'
-};
-
-class CatalogItemCreateInstanceDialog extends React.Component {
+class CatalogInstanceForm extends React.Component {
   state = {
     createItem: null,
-    namespaces: fakeNamespaces
+    namespaces: helpers.fakeNamespaces
   };
 
   static getDerivedStateFromProps(props, state) {
     const { catalogItem } = props;
     if (!catalogItem || !_.isEqual(catalogItem, state.createItem)) {
+      const createItem = helpers.createDefaultInstance(catalogItem);
       return {
-        createItem: {
-          ...defaultItem,
-          ..._.cloneDeep(catalogItem)
-        }
+        createItem,
+        initItem: _.cloneDeep(createItem)
       };
     }
 
@@ -68,6 +54,14 @@ class CatalogItemCreateInstanceDialog extends React.Component {
     const { createItem } = this.state;
     const { onChange } = this.props;
     createItem.plan = event.target.value;
+    onChange(createItem, this.validateForm(createItem));
+  };
+
+  onValueChange = (event, field) => {
+    const { createItem } = this.state;
+    const { onChange } = this.props;
+    createItem[field] = event.target.value;
+    console.dir(createItem);
     onChange(createItem, this.validateForm(createItem));
   };
 
@@ -166,7 +160,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue="128Mi"
+              value={createItem.memoryLimit}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -176,7 +171,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue="256Mi"
+              value={createItem.volumeCapacity}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -186,7 +182,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue="https://github.com/redhat-developer/s2i-aspnet-musicstore-ex.git"
+              value={createItem.gitRepo}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -196,7 +193,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue="https://github.com/redhat-developer/s2i-aspnet-musicstore-ex.git"
+              value={createItem.gitRef}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -206,7 +204,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue=""
+              value={createItem.contextDir}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -216,7 +215,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue="samples/MusicStore"
+              value={createItem.startupProject}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -226,7 +226,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue=""
+              value={createItem.sdkVersion}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -236,7 +237,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue=""
+              value={createItem.startupAssembly}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -246,7 +248,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue=""
+              value={createItem.npmTools}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -256,7 +259,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue=""
+              value={createItem.testProjects}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -266,7 +270,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
             <Form.FormControl
               className="catalog-form-control"
               type="text"
-              defaultValue="Release"
+              value={createItem.configuration}
+              onChange={e => this.onValueChange(e, 'memoryLimit')}
             />
           )}
         </Form.FormGroup>
@@ -275,15 +280,15 @@ class CatalogItemCreateInstanceDialog extends React.Component {
   }
 }
 
-CatalogItemCreateInstanceDialog.propTypes = {
+CatalogInstanceForm.propTypes = {
   catalogItem: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   horizontal: PropTypes.bool
 };
 
-CatalogItemCreateInstanceDialog.defaultProps = {
+CatalogInstanceForm.defaultProps = {
   catalogItem: null,
   horizontal: true
 };
 
-export default CatalogItemCreateInstanceDialog;
+export default CatalogInstanceForm;

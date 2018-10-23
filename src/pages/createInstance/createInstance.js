@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as _ from 'lodash-es';
 
 import CatalogItemHeader from 'patternfly-react-extensions/dist/esm/components/CatalogItemHeader/CatalogItemHeader';
 import { Grid } from 'patternfly-react/dist/esm/components/Grid';
@@ -13,14 +12,18 @@ import {
   createCatalogInstance,
   hideCreateCatalogInstance
 } from '../../redux/actions/catalogActions';
-import CreateCatalogInstanceForm from '../../components/createCatalogInstaceForm';
+
+import CatalogInstanceForm from '../../components/catalogInstanceForm';
+import { helpers } from '../../common/helpers';
 
 class CreateInstance extends React.Component {
   constructor(props) {
     super(props);
 
+    const createItem = helpers.createDefaultInstance(props.creatingItem);
+
     this.state = {
-      createItem: _.cloneDeep(props.creatingItem),
+      createItem,
       createItemValid: false
     };
   }
@@ -45,6 +48,15 @@ class CreateInstance extends React.Component {
   };
 
   onCancel = () => {
+    const { createItem } = this.state;
+
+    if (!helpers.isDefaultInstance(createItem)) {
+      helpers.showCancelCreateInstanceConfirmation(
+        this.props.hideCreateCatalogInstance
+      );
+      return;
+    }
+
     this.props.hideCreateCatalogInstance();
   };
 
@@ -63,7 +75,7 @@ class CreateInstance extends React.Component {
         </Modal.Header>
         <Modal.Body className="catalog-modal__body">
           <Grid fluid className="catalog-create-instance-form">
-            <CreateCatalogInstanceForm
+            <CatalogInstanceForm
               catalogItem={createItem}
               onChange={this.updateCreateItem}
               horizontal={false}
@@ -117,21 +129,16 @@ CreateInstance.defaultProps = {
   hideCreateCatalogInstance: null
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   createCatalogInstance: item => dispatch(createCatalogInstance(item)),
   hideCreateCatalogInstance: () => dispatch(hideCreateCatalogInstance())
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign(
-    {},
-    {
-      createItem: state.catalog.creatingItem,
-      creatingInstance: state.catalog.catalogInstances.pending,
-      instanceCreated: state.catalog.catalogInstances.fulfilled
-    }
-  );
-};
+const mapStateToProps = state => ({
+  createItem: state.catalog.creatingItem,
+  creatingInstance: state.catalog.catalogInstances.pending,
+  instanceCreated: state.catalog.catalogInstances.fulfilled
+});
 
 export default connect(
   mapStateToProps,

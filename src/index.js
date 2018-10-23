@@ -6,7 +6,6 @@ import { store } from './redux/store';
 import registerServiceWorker from './registerServiceWorker';
 import App from './app';
 
-
 ReactDOM.render(
   <Provider store={store}>
     <Router>

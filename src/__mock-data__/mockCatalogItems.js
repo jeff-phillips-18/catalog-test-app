@@ -1,28 +1,30 @@
 import * as React from 'react';
 
 const description = (
-  <div>
-    <h2>Lorem ipsum</h2>
+  <div key="description">
+    <h2 key="desc-1">Lorem ipsum</h2>
     Praesent sagittis est et arcu fringilla placerat. Cras erat ante, dapibus
     non mauris ac, volutpat sollicitudin ligula. Morbi gravida nisl vel risus
     tempor, sit amet luctus erat tempus. Curabitur blandit sem non pretium
     bibendum. Donec eleifend non turpis vitae vestibulum. Vestibulum ut sem ac
     nunc posuere blandit sed porta lorem. Cras rutrum velit vel leo iaculis
     imperdiet.
-    <h2>Dolor sit amet</h2>
+    <h2 key="desc-2">Dolor sit amet</h2>
     Donec consequat dignissim neque, sed suscipit quam egestas in. Fusce
     bibendum laoreet lectus commodo interdum. Vestibulum odio ipsum, tristique
     et ante vel, iaculis placerat nulla. Suspendisse iaculis urna feugiat lorem
     semper, ut iaculis risus tempus.
-    <h2>Consectetur</h2>
+    <h2 key="desc-3">Consectetur</h2>
     Curabitur nisl quam, interdum a venenatis a, consequat a ligula. Nunc nec
     lorem in erat rhoncus lacinia at ac orci. Sed nec augue congue, vehicula
     justo quis, venenatis turpis. Nunc quis consectetur purus. Nam vitae viverra
     lacus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
     eu augue felis. Maecenas in dignissim purus, quis pulvinar lectus. Vivamus
     euismod ultrices diam, in mattis nibh.
-    <h2>Documentations</h2>
-    <a href="https://www.patternfly.org/">https://www.patternfly.org</a>
+    <h2 key="desc-4">Documentations</h2>
+    <a key="link-1" href="https://www.patternfly.org/">
+      https://www.patternfly.org
+    </a>
   </div>
 );
 

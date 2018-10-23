@@ -22,7 +22,7 @@ const initialState = {
   }
 };
 
-const catalogReducer = function(state = initialState, action) {
+const catalogReducer = (state = initialState, action) => {
   switch (action.type) {
     case catalogConstants.SHOW_CREATE_INSTANCE:
       return helpers.setStateProp(

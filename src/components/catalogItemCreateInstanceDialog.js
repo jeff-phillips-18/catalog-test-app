@@ -12,7 +12,7 @@ import { Modal } from 'patternfly-react/dist/esm/components/Modal';
 import { helpers } from '../common/helpers';
 import { createCatalogInstance } from '../redux/actions/catalogActions';
 import { getImageForIconClass } from '../utils/catalogItemIcon';
-import CreateCatalogInstanceForm from './createCatalogInstaceForm';
+import CatalogInstanceForm from './catalogInstanceForm';
 
 class CatalogItemCreateInstanceDialog extends React.Component {
   constructor(props) {
@@ -43,14 +43,29 @@ class CatalogItemCreateInstanceDialog extends React.Component {
     this.setState({ createItem: item, createItemValid: valid });
   };
 
-  render() {
+  closeDialog = () => {
+    const { createItem } = this.state;
     const { onClose } = this.props;
+
+    if (!helpers.isDefaultInstance(createItem)) {
+      helpers.showCancelCreateInstanceConfirmation(onClose);
+      return;
+    }
+
+    onClose();
+  };
+
+  render() {
     const { createItem, createItemValid } = this.state;
 
     return (
-      <Modal show className="right-side-modal-pf" bsSize="lg">
+      <Modal
+        show
+        className="right-side-modal-pf catalog-create-instance-dialog"
+        bsSize="lg"
+      >
         <Modal.Header>
-          <Modal.CloseButton onClick={onClose} />
+          <Modal.CloseButton onClick={this.closeDialog} />
           <CatalogItemHeader
             className="catalog-modal__item-header"
             iconImg={getImageForIconClass(createItem.imgUrl)}
@@ -60,7 +75,7 @@ class CatalogItemCreateInstanceDialog extends React.Component {
         </Modal.Header>
         <Modal.Body className="catalog-modal__body">
           <Grid fluid className="catalog-create-instance-form">
-            <CreateCatalogInstanceForm
+            <CatalogInstanceForm
               catalogItem={createItem}
               onChange={this.updateCreateItem}
               horizontal
@@ -71,7 +86,11 @@ class CatalogItemCreateInstanceDialog extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer className="catalog-modal__footer">
-          <Button bsStyle="default" className="btn-cancel" onClick={onClose}>
+          <Button
+            bsStyle="default"
+            className="btn-cancel"
+            onClick={this.closeDialog}
+          >
             Cancel
           </Button>
           <Button
@@ -97,13 +116,11 @@ CatalogItemCreateInstanceDialog.defaultProps = {
   createCatalogInstance: helpers.noop
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   createCatalogInstance: item => dispatch(createCatalogInstance(item))
 });
 
-const mapStateToProps = function(state) {
-  return {};
-};
+const mapStateToProps = state => {};
 
 export default connect(
   mapStateToProps,
