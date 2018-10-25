@@ -8,7 +8,10 @@ import { Alert } from 'patternfly-react/dist/esm/components/Alert';
 
 import CatalogView from '../../components/catalogView';
 import CreateInstance from '../createInstance/createInstance';
-import { fetchCatalogItems } from '../../redux/actions/catalogActions';
+import {
+  fetchCatalogItems,
+  navigateRequestClear
+} from '../../redux/actions/catalogActions';
 import { helpers } from '../../common/helpers';
 
 class CatalogA extends React.Component {
@@ -16,6 +19,15 @@ class CatalogA extends React.Component {
     this.refresh();
   }
 
+  componentDidUpdate(prevProps) {
+    const { createShown, navigateOnHide, history } = this.props;
+    if (createShown !== prevProps.createShown) {
+      if (!createShown && navigateOnHide) {
+        this.props.navigateRequestClear();
+        history.push(navigateOnHide);
+      }
+    }
+  }
   refresh() {
     this.props.fetchCatalogItems();
   }
@@ -91,11 +103,13 @@ CatalogA.propTypes = {
   errorMessage: PropTypes.string,
   pending: PropTypes.bool,
   createShown: PropTypes.bool,
+  navigateOnHide: PropTypes.string,
   createItem: PropTypes.object,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
-  fetchCatalogItems: PropTypes.func
+  fetchCatalogItems: PropTypes.func,
+  navigateRequestClear: PropTypes.func
 };
 
 CatalogA.defaultProps = {
@@ -104,18 +118,22 @@ CatalogA.defaultProps = {
   errorMessage: '',
   pending: false,
   createShown: false,
+  navigateOnHide: '',
   createItem: null,
-  fetchCatalogItems: helpers.noop
+  fetchCatalogItems: helpers.noop,
+  navigateRequestClear: helpers.noop
 };
 
 const mapDispatchToProps = dispatch => ({
-  fetchCatalogItems: () => dispatch(fetchCatalogItems())
+  fetchCatalogItems: () => dispatch(fetchCatalogItems()),
+  navigateRequestClear: () => dispatch(navigateRequestClear())
 });
 
 const mapStateToProps = state => ({
   ...state.catalog.catalogItems,
   createShown: state.catalog.creatingInstance.shown,
-  createItem: state.catalog.creatingInstance.creatingItem
+  createItem: state.catalog.creatingInstance.creatingItem,
+  navigateOnHide: state.catalog.navigateRequest.navigateTo
 });
 
 export default connect(

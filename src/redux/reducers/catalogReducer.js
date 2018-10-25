@@ -18,18 +18,46 @@ const initialState = {
   },
   creatingInstance: {
     shown: false,
-    creatingItem: null
+    creatingItem: null,
+    navigateOnHide: ''
+  },
+  navigateRequest: {
+    navigateTo: ''
   }
 };
 
 const catalogReducer = (state = initialState, action) => {
   switch (action.type) {
+    case catalogConstants.NAVIGATE_REQUEST:
+      return helpers.setStateProp(
+        'navigateRequest',
+        {
+          navigateTo: action.navigateTo
+        },
+        {
+          state,
+          initialState
+        }
+      );
+
+    case catalogConstants.NAVIGATE_REQUEST_CLEAR:
+      return helpers.setStateProp(
+        'navigateRequest',
+        {
+          navigateTo: ''
+        },
+        {
+          state,
+          initialState
+        }
+      );
+
     case catalogConstants.SHOW_CREATE_INSTANCE:
       return helpers.setStateProp(
         'creatingInstance',
         {
           shown: true,
-          creatingItem: action.payload.item
+          creatingItem: action.item
         },
         {
           state,
@@ -42,7 +70,8 @@ const catalogReducer = (state = initialState, action) => {
         'creatingInstance',
         {
           shown: false,
-          creatingItem: null
+          creatingItem: null,
+          navigateOnHide: action.navigateTo
         },
         {
           state,

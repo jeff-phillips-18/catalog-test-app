@@ -30,11 +30,15 @@ class CreateInstance extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { instanceCreated } = this.props;
+    const { instanceCreated, navRequest } = this.props;
 
     if (instanceCreated && !prevProps.instanceCreated) {
       this.props.history.push('/');
       this.props.hideCreateCatalogInstance();
+    }
+    if (navRequest !== prevProps.navRequest) {
+      console.log(navRequest);
+      this.onCancel(navRequest);
     }
 
     return null;
@@ -48,17 +52,17 @@ class CreateInstance extends React.Component {
     this.setState({ createItem: item, createItemValid: valid });
   };
 
-  onCancel = () => {
+  onCancel = (navigateTo = null) => {
     const { createItem } = this.state;
 
     if (!helpers.isDefaultInstance(createItem)) {
-      helpers.showCancelCreateInstanceConfirmation(
-        this.props.hideCreateCatalogInstance
+      helpers.showCancelCreateInstanceConfirmation(() =>
+        this.props.hideCreateCatalogInstance(navigateTo)
       );
       return;
     }
 
-    this.props.hideCreateCatalogInstance();
+    this.props.hideCreateCatalogInstance(navigateTo);
   };
 
   render() {
@@ -132,14 +136,16 @@ CreateInstance.propTypes = {
   hideCreateCatalogInstance: PropTypes.func,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
-  }).isRequired
+  }).isRequired,
+  navRequest: PropTypes.string
 };
 
 CreateInstance.defaultProps = {
   creatingInstance: false,
   instanceCreated: false,
   createCatalogInstance: null,
-  hideCreateCatalogInstance: null
+  hideCreateCatalogInstance: null,
+  navRequest: ''
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -150,7 +156,8 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   createItem: state.catalog.creatingItem,
   creatingInstance: state.catalog.catalogInstances.pending,
-  instanceCreated: state.catalog.catalogInstances.fulfilled
+  instanceCreated: state.catalog.catalogInstances.fulfilled,
+  navRequest: state.catalog.navigateRequest.navigateTo
 });
 
 export default connect(

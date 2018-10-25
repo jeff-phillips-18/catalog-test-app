@@ -45,7 +45,7 @@ const showCreateCatalogInstance = item => dispatch => {
     () =>
       dispatch({
         type: catalogConstants.SHOW_CREATE_INSTANCE,
-        payload: { item }
+        item
       }),
     10
   );
@@ -62,11 +62,34 @@ const hideCreateCatalogInstance = () => dispatch => {
   );
 };
 
+const navigateRequest = href => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.NAVIGATE_REQUEST,
+        navigateTo: href
+      }),
+    10
+  );
+};
+
+const navigateRequestClear = () => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.NAVIGATE_REQUEST_CLEAR
+      }),
+    10
+  );
+};
+
 const catalogActions = {
   fetchCatalogItems,
   createCatalogInstance,
   showCreateCatalogInstance,
-  hideCreateCatalogInstance
+  hideCreateCatalogInstance,
+  navigateRequest,
+  navigateRequestClear
 };
 
 export {
@@ -74,5 +97,7 @@ export {
   fetchCatalogItems,
   createCatalogInstance,
   showCreateCatalogInstance,
-  hideCreateCatalogInstance
+  hideCreateCatalogInstance,
+  navigateRequest,
+  navigateRequestClear
 };

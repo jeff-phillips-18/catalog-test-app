@@ -123,7 +123,7 @@ const mapDispatchToProps = dispatch => ({
   createCatalogInstance: item => dispatch(createCatalogInstance(item))
 });
 
-const mapStateToProps = state => {};
+const mapStateToProps = state => ({});
 
 export default connect(
   mapStateToProps,
