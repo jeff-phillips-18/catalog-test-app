@@ -61,6 +61,8 @@ class CatalogItemCreateInstanceDialog extends React.Component {
     return (
       <Modal
         show
+        backdrop
+        onHide={this.closeDialog}
         className="right-side-modal-pf catalog-create-instance-dialog"
         bsSize="lg"
       >

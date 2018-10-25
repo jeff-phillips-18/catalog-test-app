@@ -21,7 +21,13 @@ const CatalogItemDetailsDialog = ({
   onShowCreateInstance,
   onClose
 }) => (
-  <Modal show className="right-side-modal-pf" bsSize="lg">
+  <Modal
+    show
+    backdrop
+    onHide={onClose}
+    className="right-side-modal-pf"
+    bsSize="lg"
+  >
     <Modal.Header>
       <Modal.CloseButton onClick={onClose} />
       <CatalogItemHeader
