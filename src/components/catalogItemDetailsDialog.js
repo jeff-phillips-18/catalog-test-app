@@ -34,7 +34,7 @@ const CatalogItemDetailsDialog = ({
         className="catalog-modal__item-header"
         iconImg={getImageForIconClass(detailsItem.imgUrl)}
         title={detailsItem.name}
-        vendor={<span> {detailsItem.provider}</span>}
+        vendor={`${detailsItem.version} provided by ${detailsItem.provider}`}
       />
     </Modal.Header>
     <Modal.Body>

@@ -144,9 +144,14 @@ $catalog-item-icon-size-sm: 24px;
 }
 
 .catalog-create-instance-dialog {
-  .modal-content {
-    display: flex;
-    flex-direction: column;
+  .modal-body {
+    padding-bottom: 0;
+  }
+  .catalog-create-instance-form {
+    padding-top: 10px;
+    [class*='col-'] {
+      padding: 0 10px;
+    }
   }
 }
 
@@ -178,10 +183,6 @@ $catalog-item-icon-size-sm: 24px;
   &__footer {
     border-top: 1px solid $color-pf-black-200
   }
-}
-
-.catalog-create-instance-form {
-  width: 60%;
 }
 
 .catalog-modal__long-description {

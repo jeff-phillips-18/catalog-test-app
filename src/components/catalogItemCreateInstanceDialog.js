@@ -68,27 +68,25 @@ class CatalogItemCreateInstanceDialog extends React.Component {
       >
         <Modal.Header>
           <Modal.CloseButton onClick={this.closeDialog} />
-          <h2>Create Catalog Instance</h2>
+          <CatalogItemHeader
+            className="catalog-modal__item-header"
+            iconImg={getImageForIconClass(createItem.imgUrl)}
+            title={createItem.name}
+            vendor={`${createItem.version} provided by ${createItem.provider}`}
+          />
         </Modal.Header>
-        <Modal.Body className="catalog-modal__body">
+        <Modal.Body>
+          <h3>Description</h3>
+          {createItem.shortDescription}
+          <h3>Create Catalog Instance</h3>
           <Grid fluid className="catalog-create-instance-form">
             <CatalogInstanceForm
               catalogItem={createItem}
               onChange={this.updateCreateItem}
               horizontal
+              labelSize={3}
             />
           </Grid>
-          <div className="catalog-modal__item catalog-modal__description">
-            <div className="catalog-modal__description__header">
-              <CatalogItemHeader
-                className="catalog-modal__item-header"
-                iconImg={getImageForIconClass(createItem.imgUrl)}
-                title={createItem.name}
-                vendor={<span> {createItem.provider}</span>}
-              />
-            </div>
-            {createItem.shortDescription}
-          </div>
         </Modal.Body>
         <Modal.Footer className="catalog-modal__footer">
           <Button

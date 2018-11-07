@@ -66,10 +66,10 @@ class CatalogInstanceForm extends React.Component {
   };
 
   renderFormLabel = label => {
-    const { horizontal } = this.props;
+    const { horizontal, labelSize } = this.props;
     if (horizontal) {
       return (
-        <Grid.Col componentClass={Form.ControlLabel} sm={5}>
+        <Grid.Col componentClass={Form.ControlLabel} sm={labelSize}>
           {label}
         </Grid.Col>
       );
@@ -78,9 +78,9 @@ class CatalogInstanceForm extends React.Component {
   };
 
   renderFormControl = control => {
-    const { horizontal } = this.props;
+    const { horizontal, labelSize } = this.props;
     if (horizontal) {
-      return <Grid.Col sm={7}>{control}</Grid.Col>;
+      return <Grid.Col sm={12 - labelSize}>{control}</Grid.Col>;
     }
     return control;
   };
@@ -283,12 +283,14 @@ class CatalogInstanceForm extends React.Component {
 CatalogInstanceForm.propTypes = {
   catalogItem: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  horizontal: PropTypes.bool
+  horizontal: PropTypes.bool,
+  labelSize: PropTypes.number
 };
 
 CatalogInstanceForm.defaultProps = {
   catalogItem: null,
-  horizontal: true
+  horizontal: true,
+  labelSize: 5
 };
 
 export default CatalogInstanceForm;

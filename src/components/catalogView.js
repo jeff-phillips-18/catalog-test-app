@@ -325,7 +325,7 @@ class CatalogView extends React.Component {
           const iconClass = item.IconClass
             ? `icon ${normalizeIconClass(item.conClass)}`
             : null;
-          const vendor = provider ? `Provided by ${provider}` : null;
+          const vendor = provider ? `provided by ${provider}` : null;
           return (
             <CatalogTile
               id={uid}
@@ -364,7 +364,7 @@ class CatalogView extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <React.Fragment key={category.id}>
         {_.map(subcategories, subcategory =>
           this.renderCategory(subcategory, false)
         )}
