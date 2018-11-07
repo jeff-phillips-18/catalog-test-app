@@ -309,19 +309,15 @@ class CatalogView extends React.Component {
     this.setState({ showCreateInstance: false });
   };
 
-  renderCategoryTiles(category) {
-    const { showAllItemsForCategory } = this.state;
+  renderCategory(category, viewAll) {
     const { id, label, parentCategory, items } = category;
-    if (showAllItemsForCategory && id !== showAllItemsForCategory) {
-      return null;
-    }
 
     return (
       <CatalogTileView.Category
         key={id}
         title={label}
         totalItems={items && category.items.length}
-        viewAll={showAllItemsForCategory === id}
+        viewAll={viewAll}
         onViewAll={() => this.syncTabsAndTiles(id, parentCategory)}
       >
         {_.map(items, item => {
@@ -344,6 +340,35 @@ class CatalogView extends React.Component {
           );
         })}
       </CatalogTileView.Category>
+    );
+  }
+
+  renderCategoryTiles(category) {
+    const { currentCategories } = this.state;
+    const { subcategories } = category;
+    if (category.id === 'all') {
+      return (
+        <React.Fragment>
+          {_.map(currentCategories, topCategory => {
+            if (topCategory.id === 'all') {
+              return null;
+            }
+            return this.renderCategory(topCategory, false);
+          })}
+        </React.Fragment>
+      );
+    }
+
+    if (!_.size(subcategories)) {
+      return this.renderCategory(category, true);
+    }
+
+    return (
+      <React.Fragment>
+        {_.map(subcategories, subcategory =>
+          this.renderCategory(subcategory, false)
+        )}
+      </React.Fragment>
     );
   }
 

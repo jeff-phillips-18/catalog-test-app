@@ -24,7 +24,7 @@ $icon-font-path: './fonts/';
   Application Overrides
 */
 
-//override navbar-default from React Boostrap NavBar
+//override navbar-default from React Bootstrap NavBar
 .navbar-default .navbar-toggle {
   &:focus,
   &:hover {
@@ -63,6 +63,9 @@ a:focus {
 $catalog-item-icon-size-lg: 40px;
 $catalog-item-icon-size-sm: 24px;
 
+.catalog-tile-pf {
+  padding-bottom: 20px;
+}
 .catalog-item-icon {
   padding-right: 10px;
 
