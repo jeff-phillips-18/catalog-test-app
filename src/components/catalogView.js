@@ -257,7 +257,7 @@ class CatalogView extends React.Component {
         showDetails: false,
         detailsItem: undefined
       });
-      this.props.showCreateCatalogDialog(detailsItem, true);
+      this.props.showCreateCatalogDialog(detailsItem);
       return;
     }
 
@@ -344,6 +344,7 @@ CatalogView.propTypes = {
   noDetails: PropTypes.bool,
   dialogForm: PropTypes.bool,
   wizardForm: PropTypes.bool,
+  progressiveForm: PropTypes.bool,
   createDialogShown: PropTypes.bool,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
@@ -359,6 +360,7 @@ CatalogView.defaultProps = {
   noDetails: false,
   dialogForm: false,
   wizardForm: false,
+  progressiveForm: false,
   showCreateCatalogInstance: helpers.noop,
   showCreateCatalogDialog: helpers.noop,
   createDialogShown: false

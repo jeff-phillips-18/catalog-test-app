@@ -11,7 +11,7 @@ import { helpers } from '../../common/helpers';
 import { setCreateWizardStepValid } from '../../redux/actions/catalogActions';
 import CreateInstanceNameForm from '../createInstanceForms/createInstanceNameForm';
 
-class CreateInstanceWizardNameStep extends React.Component {
+class CreateInstanceProgressiveNameStep extends React.Component {
   componentDidMount() {
     this.validateForm(this.props.createItem);
   }
@@ -26,38 +26,26 @@ class CreateInstanceWizardNameStep extends React.Component {
     const { createItem } = this.props;
 
     return (
-      <React.Fragment>
-        <div className="catalog-modal__wizard-description">
-          <CatalogItemHeader
-            className="catalog-modal__item-header"
-            iconImg={getImageForIconClass(createItem.imgUrl)}
-            title={createItem.name}
-            vendor={`${createItem.version} provided by ${createItem.provider}`}
+      <Grid fluid className="catalog-create-instance-form">
+        <Form onSubmit={e => e.preventDefault()} horizontal>
+          <CreateInstanceNameForm
+            createItem={createItem}
+            validateForm={this.validateForm}
+            horizontal
+            labelSize={3}
           />
-          <h3>Description</h3>
-          {createItem.shortDescription}
-        </div>
-        <Grid fluid className="catalog-create-instance-form">
-          <Form onSubmit={e => e.preventDefault()} horizontal>
-            <CreateInstanceNameForm
-              createItem={createItem}
-              validateForm={this.validateForm}
-              horizontal
-              labelSize={3}
-            />
-          </Form>
-        </Grid>
-      </React.Fragment>
+        </Form>
+      </Grid>
     );
   }
 }
 
-CreateInstanceWizardNameStep.propTypes = {
+CreateInstanceProgressiveNameStep.propTypes = {
   createItem: PropTypes.object,
   setCreateWizardStepValid: PropTypes.func
 };
 
-CreateInstanceWizardNameStep.defaultProps = {
+CreateInstanceProgressiveNameStep.defaultProps = {
   createItem: {},
   setCreateWizardStepValid: helpers.noop
 };
@@ -74,4 +62,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateInstanceWizardNameStep);
+)(CreateInstanceProgressiveNameStep);

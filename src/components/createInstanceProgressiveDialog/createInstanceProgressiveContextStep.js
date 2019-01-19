@@ -7,7 +7,7 @@ import { helpers } from '../../common/helpers';
 import { setCreateWizardStepValid } from '../../redux/actions/catalogActions';
 import CreateInstanceContextForm from '../createInstanceForms/createInstanceContextForm';
 
-class CreateInstanceWizardContextStep extends React.Component {
+class CreateInstanceProgressiveContextStep extends React.Component {
   componentDidMount() {
     this.validateForm(this.props.createItem);
   }
@@ -36,12 +36,12 @@ class CreateInstanceWizardContextStep extends React.Component {
   }
 }
 
-CreateInstanceWizardContextStep.propTypes = {
+CreateInstanceProgressiveContextStep.propTypes = {
   createItem: PropTypes.object,
   setCreateWizardStepValid: PropTypes.func
 };
 
-CreateInstanceWizardContextStep.defaultProps = {
+CreateInstanceProgressiveContextStep.defaultProps = {
   createItem: {},
   setCreateWizardStepValid: helpers.noop
 };
@@ -58,4 +58,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateInstanceWizardContextStep);
+)(CreateInstanceProgressiveContextStep);

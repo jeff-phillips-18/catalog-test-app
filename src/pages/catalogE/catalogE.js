@@ -12,9 +12,9 @@ import {
   navigateRequestClear
 } from '../../redux/actions/catalogActions';
 import { helpers } from '../../common/helpers';
-import CreateInstanceWizard from '../../components/createInstanceWizard/createInstanceWizard';
+import CreateInstanceProgressiveDialog from '../../components/createInstanceProgressiveDialog/createInstanceProgressiveDialog';
 
-class CatalogD extends React.Component {
+class CatalogE extends React.Component {
   componentDidMount() {
     this.refresh();
     this.props.navigateRequestClear();
@@ -80,7 +80,7 @@ class CatalogD extends React.Component {
     return (
       <React.Fragment>
         <CatalogView history={history} wizardForm catalogItems={catalogItems} />
-       <CreateInstanceWizard show={createDialogShown} />
+        <CreateInstanceProgressiveDialog show={createDialogShown} />
       </React.Fragment>
     );
   };
@@ -97,7 +97,7 @@ class CatalogD extends React.Component {
   }
 }
 
-CatalogD.propTypes = {
+CatalogE.propTypes = {
   catalogItems: PropTypes.array,
   error: PropTypes.bool,
   errorMessage: PropTypes.string,
@@ -111,7 +111,7 @@ CatalogD.propTypes = {
   navigateTo: PropTypes.string
 };
 
-CatalogD.defaultProps = {
+CatalogE.defaultProps = {
   catalogItems: [],
   error: false,
   errorMessage: '',
@@ -136,4 +136,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CatalogD);
+)(CatalogE);

@@ -174,3 +174,10 @@ $catalog-item-icon-size-sm: 24px;
     }
   }
 }
+
+.catalog-create-instance-progressive-breadcrumbs {
+  .breadcrumb {
+    display: inline-block;
+    margin-left: 10px;
+  }
+}

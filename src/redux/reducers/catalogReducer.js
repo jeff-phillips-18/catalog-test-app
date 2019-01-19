@@ -26,7 +26,6 @@ const initialState = {
   createDialog: {
     shown: false,
     creatingItem: null,
-    wizard: true,
     validSteps: []
   },
   navigateRequest: {
@@ -107,7 +106,6 @@ const catalogReducer = (state = initialState, action) => {
         {
           shown: true,
           creatingItem: helpers.createDefaultInstance(action.item),
-          wizard: action.wizard,
           validSteps: getInitialWizardValidSteps()
         },
         {
@@ -133,8 +131,7 @@ const catalogReducer = (state = initialState, action) => {
         'createDialog',
         {
           shown: false,
-          creatingItem: null,
-          navigateOnHide: action.navigateTo
+          creatingItem: null
         },
         {
           state,

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Form, Grid } from 'patternfly-react';
 import { helpers } from '../../common/helpers';
 import { setCreateWizardStepValid } from '../../redux/actions/catalogActions';
+import CreateInstanceStartupForm from '../createInstanceForms/createInstanceStartupForm';
 
 class CreateInstanceWizardStartupStep extends React.Component {
   componentDidMount() {
@@ -14,12 +15,6 @@ class CreateInstanceWizardStartupStep extends React.Component {
   validateForm = createItem => {
     const { startupProject } = createItem;
     this.props.setCreateWizardStepValid(3, !!startupProject);
-  };
-
-  onValueChange = (event, field) => {
-    const { createItem } = this.props;
-    createItem[field] = event.target.value;
-    this.validateForm(createItem);
     this.forceUpdate();
   };
 
@@ -27,39 +22,16 @@ class CreateInstanceWizardStartupStep extends React.Component {
     const { createItem } = this.props;
 
     return (
-      <Grid.Row className="catalog-modal__form-container">
-        <Grid.Col sm={8} md={6}>
-          <Form>
-            <Form.FormGroup>
-              <Form.ControlLabel>Startup Project</Form.ControlLabel>
-              <Form.FormControl
-                className="catalog-form-control"
-                type="text"
-                value={createItem.startupProject}
-                onChange={e => this.onValueChange(e, 'startupProject')}
-              />
-            </Form.FormGroup>
-            <Form.FormGroup>
-              <Form.ControlLabel>SDK Version</Form.ControlLabel>
-              <Form.FormControl
-                className="catalog-form-control"
-                type="text"
-                value={createItem.sdkVersion}
-                onChange={e => this.onValueChange(e, 'sdkVersion')}
-              />
-            </Form.FormGroup>
-            <Form.FormGroup>
-              <Form.ControlLabel>Startup Assembly</Form.ControlLabel>
-              <Form.FormControl
-                className="catalog-form-control"
-                type="text"
-                value={createItem.startupAssembly}
-                onChange={e => this.onValueChange(e, 'startupAssembly')}
-              />
-            </Form.FormGroup>
-          </Form>
-        </Grid.Col>
-      </Grid.Row>
+      <Grid fluid className="catalog-create-instance-form">
+        <Form onSubmit={e => e.preventDefault()} horizontal>
+          <CreateInstanceStartupForm
+            createItem={createItem}
+            validateForm={this.validateForm}
+            horizontal
+            labelSize={3}
+          />
+        </Form>
+      </Grid>
     );
   }
 }

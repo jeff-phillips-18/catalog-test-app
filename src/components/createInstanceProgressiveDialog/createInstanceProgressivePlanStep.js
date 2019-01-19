@@ -5,16 +5,19 @@ import { connect } from 'react-redux';
 import { Form, Grid } from 'patternfly-react';
 import { helpers } from '../../common/helpers';
 import { setCreateWizardStepValid } from '../../redux/actions/catalogActions';
-import CreateInstanceContextForm from '../createInstanceForms/createInstanceContextForm';
+import CreateInstancePlanForm from '../createInstanceForms/createInstancePlanForm';
 
-class CreateInstanceWizardContextStep extends React.Component {
+class CreateInstanceProgressivePlanStep extends React.Component {
   componentDidMount() {
     this.validateForm(this.props.createItem);
   }
 
   validateForm = createItem => {
-    const { gitRepo, gitRef } = createItem;
-    this.props.setCreateWizardStepValid(2, !!gitRepo && !!gitRef);
+    const { plan, memoryLimit, volumeCapacity } = createItem;
+    this.props.setCreateWizardStepValid(
+      1,
+      !!plan && !!memoryLimit && !!volumeCapacity
+    );
     this.forceUpdate();
   };
 
@@ -24,7 +27,7 @@ class CreateInstanceWizardContextStep extends React.Component {
     return (
       <Grid fluid className="catalog-create-instance-form">
         <Form onSubmit={e => e.preventDefault()} horizontal>
-          <CreateInstanceContextForm
+          <CreateInstancePlanForm
             createItem={createItem}
             validateForm={this.validateForm}
             horizontal
@@ -36,12 +39,12 @@ class CreateInstanceWizardContextStep extends React.Component {
   }
 }
 
-CreateInstanceWizardContextStep.propTypes = {
+CreateInstanceProgressivePlanStep.propTypes = {
   createItem: PropTypes.object,
   setCreateWizardStepValid: PropTypes.func
 };
 
-CreateInstanceWizardContextStep.defaultProps = {
+CreateInstanceProgressivePlanStep.defaultProps = {
   createItem: {},
   setCreateWizardStepValid: helpers.noop
 };
@@ -58,4 +61,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateInstanceWizardContextStep);
+)(CreateInstanceProgressivePlanStep);

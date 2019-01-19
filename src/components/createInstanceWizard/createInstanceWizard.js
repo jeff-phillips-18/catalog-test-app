@@ -76,92 +76,98 @@ class CreateInstanceWizard extends React.Component {
   }
 
   render() {
-    const { creatingItem, validSteps } = this.props;
+    const { creatingItem, validSteps, show } = this.props;
     const { activeStepIndex } = this.state;
     const wizardSteps = createInstanceWizardSteps;
 
     return (
       <Modal
-        show
+        show={show}
         backdrop="static"
         onHide={this.onCancel}
         className="right-side-modal-pf catalog-create-instance-dialog"
         dialogClassName="modal-lg wizard-pf"
         bsSize="lg"
       >
-        <Wizard.Header
-          onClose={this.onCancel}
-          title={`Create Instance of ${creatingItem.name}`}
-        />
-        <Wizard.Body className="wizard-pf-body clearfix">
-          <Wizard.Steps steps={this.renderWizardSteps()} />
-          <Wizard.Row>
-            <Wizard.Main>
-              {wizardSteps.map((step, stepIndex) => (
-                <Wizard.Contents
-                  key={step.title}
-                  stepIndex={stepIndex}
-                  activeStepIndex={activeStepIndex}
+        {show && (
+          <React.Fragment>
+            <Wizard.Header
+              onClose={this.onCancel}
+              title={`Create Instance of ${creatingItem.name}`}
+            />
+            <Wizard.Body className="wizard-pf-body clearfix">
+              <Wizard.Steps steps={this.renderWizardSteps()} />
+              <Wizard.Row>
+                <Wizard.Main className="catalog-create-instance">
+                  {wizardSteps.map((step, stepIndex) => (
+                    <Wizard.Contents
+                      key={step.title}
+                      stepIndex={stepIndex}
+                      activeStepIndex={activeStepIndex}
+                    >
+                      {stepIndex === activeStepIndex &&
+                        wizardSteps[stepIndex].page}
+                    </Wizard.Contents>
+                  ))}
+                </Wizard.Main>
+              </Wizard.Row>
+            </Wizard.Body>
+            <Wizard.Footer className="wizard-pf-footer">
+              <Button
+                bsStyle="default"
+                className="btn-cancel"
+                disabled={activeStepIndex === wizardSteps.length - 1}
+                onClick={this.onCancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                bsStyle="default"
+                disabled={
+                  activeStepIndex === 0 ||
+                  activeStepIndex === wizardSteps.length - 1
+                }
+                onClick={this.onBack}
+              >
+                <Icon type="fa" name="angle-left" />
+                Back
+              </Button>
+              {activeStepIndex < wizardSteps.length - 2 && (
+                <Button
+                  bsStyle="primary"
+                  disabled={!validSteps[activeStepIndex]}
+                  onClick={this.onNext}
                 >
-                  {stepIndex === activeStepIndex && wizardSteps[stepIndex].page}
-                </Wizard.Contents>
-              ))}
-            </Wizard.Main>
-          </Wizard.Row>
-        </Wizard.Body>
-        <Wizard.Footer className="wizard-pf-footer">
-          <Button
-            bsStyle="default"
-            className="btn-cancel"
-            disabled={activeStepIndex === wizardSteps.length - 1}
-            onClick={this.onCancel}
-          >
-            Cancel
-          </Button>
-          <Button
-            bsStyle="default"
-            disabled={
-              activeStepIndex === 0 ||
-              activeStepIndex === wizardSteps.length - 1
-            }
-            onClick={this.onBack}
-          >
-            <Icon type="fa" name="angle-left" />
-            Back
-          </Button>
-          {activeStepIndex < wizardSteps.length - 2 && (
-            <Button
-              bsStyle="primary"
-              disabled={!validSteps[activeStepIndex]}
-              onClick={this.onNext}
-            >
-              Next
-              <Icon type="fa" name="angle-right" />
-            </Button>
-          )}
-          {activeStepIndex === wizardSteps.length - 2 && (
-            <Button
-              bsStyle="primary"
-              disabled={_.some(validSteps, step => !step)}
-              onClick={this.onSubmit}
-            >
-              Save
-              <Icon type="fa" name="angle-right" />
-            </Button>
-          )}
-          {activeStepIndex === wizardSteps.length - 1 && (
-            <Button bsStyle="primary" onClick={this.onCancel}>
-              Close
-            </Button>
-          )}
-        </Wizard.Footer>
+                  Next
+                  <Icon type="fa" name="angle-right" />
+                </Button>
+              )}
+              {activeStepIndex === wizardSteps.length - 2 && (
+                <Button
+                  bsStyle="primary"
+                  disabled={_.some(validSteps, step => !step)}
+                  onClick={this.onSubmit}
+                >
+                  Save
+                  <Icon type="fa" name="angle-right" />
+                </Button>
+              )}
+              {activeStepIndex === wizardSteps.length - 1 && (
+                <Button bsStyle="primary" onClick={this.onCancel}>
+                  Close
+                </Button>
+              )}
+            </Wizard.Footer>
+          </React.Fragment>
+        )}
       </Modal>
     );
   }
 }
 
 CreateInstanceWizard.propTypes = {
-  creatingItem: PropTypes.object.isRequired,
+  show: PropTypes.bool,
+  creatingItem: PropTypes.object,
   createCatalogInstance: PropTypes.func,
   hideCreateCatalogDialog: PropTypes.func,
   validSteps: PropTypes.array,
@@ -170,6 +176,8 @@ CreateInstanceWizard.propTypes = {
 };
 
 CreateInstanceWizard.defaultProps = {
+  show: false,
+  creatingItem: {},
   validSteps: [],
   createCatalogInstance: helpers.noop,
   hideCreateCatalogDialog: helpers.noop,

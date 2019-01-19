@@ -62,13 +62,12 @@ const hideCreateCatalogInstance = () => dispatch => {
   );
 };
 
-const showCreateCatalogDialog = (item, wizard) => dispatch => {
+const showCreateCatalogDialog = item => dispatch => {
   setTimeout(
     () =>
       dispatch({
         type: catalogConstants.SHOW_CREATE_DIALOG,
-        item,
-        wizard
+        item
       }),
     10
   );
