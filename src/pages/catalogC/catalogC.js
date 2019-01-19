@@ -7,7 +7,6 @@ import EmptyState from 'patternfly-react/dist/esm/components/EmptyState/EmptySta
 import { Alert } from 'patternfly-react/dist/esm/components/Alert';
 
 import CatalogView from '../../components/catalogView';
-import CreateInstance from '../createInstance/createInstance';
 import { fetchCatalogItems } from '../../redux/actions/catalogActions';
 import { helpers } from '../../common/helpers';
 
@@ -66,21 +65,13 @@ class CatalogC extends React.Component {
   };
 
   render() {
-    const { createShown, createItem, history } = this.props;
-
-    const catalogView = (
+    return (
       <div>
         <div className="page-header">
           <h1>Catalog C</h1>
         </div>
         {this.renderView()}
       </div>
-    );
-
-    return createShown ? (
-      <CreateInstance creatingItem={createItem} history={history} />
-    ) : (
-      catalogView
     );
   }
 }
@@ -90,8 +81,6 @@ CatalogC.propTypes = {
   error: PropTypes.bool,
   errorMessage: PropTypes.string,
   pending: PropTypes.bool,
-  createShown: PropTypes.bool,
-  createItem: PropTypes.object,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
@@ -103,8 +92,6 @@ CatalogC.defaultProps = {
   error: false,
   errorMessage: '',
   pending: false,
-  createShown: false,
-  createItem: null,
   fetchCatalogItems: helpers.noop
 };
 
@@ -113,9 +100,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  ...state.catalog.catalogItems,
-  createShown: state.catalog.creatingInstance.shown,
-  createItem: state.catalog.creatingInstance.creatingItem
+  ...state.catalog.catalogItems
 });
 
 export default connect(

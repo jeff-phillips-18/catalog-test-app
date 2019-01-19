@@ -2,6 +2,8 @@ import Overview from './pages/overview/overview';
 import CatalogA from './pages/catalogA/catalogA';
 import CatalogB from './pages/catalogB/catalogB';
 import CatalogC from './pages/catalogC/catalogC';
+import CatalogD from './pages/catalogD/catalogD';
+import CatalogE from './pages/catalogE/catalogE';
 import Administration from './pages/administration/administration';
 
 const baseName = '/';
@@ -30,6 +32,18 @@ const routes = () => [
     title: 'Catalog C',
     to: '/catalog-c',
     component: CatalogC
+  },
+  {
+    iconClass: 'fa fa-bell',
+    title: 'Catalog D',
+    to: '/catalog-d',
+    component: CatalogD
+  },
+  {
+    iconClass: 'fa fa-bell',
+    title: 'Catalog E',
+    to: '/catalog-e',
+    component: CatalogE
   },
   {
     iconClass: 'fa fa-cog',

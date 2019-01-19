@@ -1,0 +1,46 @@
+body {
+  background-color: #fff;
+  color: #363636;
+  font-family: var(--pf-global--FontFamily--sans-serif);
+  font-size: 14px;
+  line-height: 1.66667;
+  margin: 0;
+}
+
+.pf-c-page__header-brand-link {
+  margin-left: 10px;
+}
+
+//override navbar-default from React Bootstrap NavBar
+.navbar-default .navbar-toggle {
+  &:focus,
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.navbar-pf-vertical {
+  .nav .nav-item-iconic > .pficon-user {
+    padding-right: 7px;
+  }
+}
+
+.container-pf-nav-pf-vertical {
+  background: #f5f5f5;
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+.blank-slate-pf {
+  &.full-page-blank-slate {
+    border: none;
+    background-color: #fff;
+    border: none;
+    height: 100%;
+    margin: 0 -20px;
+  }
+}
+

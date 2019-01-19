@@ -1,5 +1,7 @@
+import * as _ from 'lodash-es';
 import { helpers } from '../../common/helpers';
 import { catalogConstants } from '../constants';
+import { createInstanceWizardSteps } from '../../components/createInstanceWizard/createInstanceWizardConstants';
 
 const initialState = {
   catalogItems: {
@@ -21,9 +23,28 @@ const initialState = {
     creatingItem: null,
     navigateOnHide: ''
   },
+  createDialog: {
+    shown: false,
+    creatingItem: null,
+    validSteps: []
+  },
   navigateRequest: {
     navigateTo: ''
   }
+};
+
+const getInitialWizardValidSteps = () => {
+  const validSteps = [];
+  for (let i = 0; i < createInstanceWizardSteps.length - 1; i++) {
+    validSteps.push(false);
+  }
+  return validSteps;
+};
+
+const getWizardStepUpdateState = (state, stepNum, valid) => {
+  const validSteps = _.clone(state.createDialog.validSteps);
+  validSteps[stepNum] = valid;
+  return { ...state.createDialog, validSteps };
 };
 
 const catalogReducer = (state = initialState, action) => {
@@ -73,6 +94,55 @@ const catalogReducer = (state = initialState, action) => {
           creatingItem: null,
           navigateOnHide: action.navigateTo
         },
+        {
+          state,
+          initialState
+        }
+      );
+
+    case catalogConstants.SHOW_CREATE_DIALOG:
+      return helpers.setStateProp(
+        'createDialog',
+        {
+          shown: true,
+          creatingItem: helpers.createDefaultInstance(action.item),
+          validSteps: getInitialWizardValidSteps()
+        },
+        {
+          state: {
+            ...helpers.setStateProp(
+              'catalogInstances',
+              {
+                fullfilled: false
+              },
+              {
+                state,
+                initialState,
+                reset: true
+              }
+            )
+          },
+          initialState
+        }
+      );
+
+    case catalogConstants.HIDE_CREATE_DIALOG:
+      return helpers.setStateProp(
+        'createDialog',
+        {
+          shown: false,
+          creatingItem: null
+        },
+        {
+          state,
+          initialState
+        }
+      );
+
+    case catalogConstants.SET_CREATE_WIZARD_STEP_VALID:
+      return helpers.setStateProp(
+        'createDialog',
+        getWizardStepUpdateState(state, action.stepNum, action.valid),
         {
           state,
           initialState
@@ -162,6 +232,17 @@ const catalogReducer = (state = initialState, action) => {
           state,
           initialState
         }
+      );
+
+    case catalogConstants.CLEAR_CATALOG_INSTANCE:
+      return helpers.setStateProp(
+        'catalogInstances',
+        {},
+        {
+          state,
+          initialState
+        },
+        true
       );
 
     default:

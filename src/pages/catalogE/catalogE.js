@@ -7,28 +7,26 @@ import EmptyState from 'patternfly-react/dist/esm/components/EmptyState/EmptySta
 import { Alert } from 'patternfly-react/dist/esm/components/Alert';
 
 import CatalogView from '../../components/catalogView';
-import CreateInstance from '../createInstance/createInstance';
 import {
   fetchCatalogItems,
   navigateRequestClear
 } from '../../redux/actions/catalogActions';
 import { helpers } from '../../common/helpers';
+import CreateInstanceProgressiveDialog from '../../components/createInstanceProgressiveDialog/createInstanceProgressiveDialog';
 
-class CatalogA extends React.Component {
+class CatalogE extends React.Component {
   componentDidMount() {
     this.refresh();
+    this.props.navigateRequestClear();
   }
 
   componentDidUpdate(prevProps) {
-    const { createShown, navigateOnHide, history } = this.props;
-    if (createShown !== prevProps.createShown) {
-      if (!createShown && navigateOnHide) {
-        this.props.navigateRequestClear();
-        history.push(navigateOnHide);
-      }
+    const { navigateTo, history } = this.props;
+    if (navigateTo && navigateTo !== prevProps.navigateTo) {
+      this.props.navigateRequestClear();
+      history.push(navigateTo);
     }
   }
-
   refresh() {
     this.props.fetchCatalogItems();
   }
@@ -63,7 +61,13 @@ class CatalogA extends React.Component {
   };
 
   renderView = () => {
-    const { error, pending, history, catalogItems } = this.props;
+    const {
+      error,
+      pending,
+      history,
+      catalogItems,
+      createDialogShown
+    } = this.props;
 
     if (error) {
       return this.renderError();
@@ -74,55 +78,48 @@ class CatalogA extends React.Component {
     }
 
     return (
-      <CatalogView history={history} noDetails catalogItems={catalogItems} />
+      <React.Fragment>
+        <CatalogView history={history} wizardForm catalogItems={catalogItems} />
+        <CreateInstanceProgressiveDialog show={createDialogShown} />
+      </React.Fragment>
     );
   };
 
   render() {
-    const { createShown, createItem, history } = this.props;
-
-    const catalogView = (
+    return (
       <div>
         <div className="page-header">
-          <h1>Catalog A</h1>
+          <h1>Catalog C</h1>
         </div>
         {this.renderView()}
       </div>
     );
-
-    return createShown ? (
-      <CreateInstance creatingItem={createItem} history={history} />
-    ) : (
-      catalogView
-    );
   }
 }
 
-CatalogA.propTypes = {
+CatalogE.propTypes = {
   catalogItems: PropTypes.array,
   error: PropTypes.bool,
   errorMessage: PropTypes.string,
   pending: PropTypes.bool,
-  createShown: PropTypes.bool,
-  navigateOnHide: PropTypes.string,
-  createItem: PropTypes.object,
+  createDialogShown: PropTypes.bool,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
   fetchCatalogItems: PropTypes.func,
-  navigateRequestClear: PropTypes.func
+  navigateRequestClear: PropTypes.func,
+  navigateTo: PropTypes.string
 };
 
-CatalogA.defaultProps = {
+CatalogE.defaultProps = {
   catalogItems: [],
   error: false,
   errorMessage: '',
   pending: false,
-  createShown: false,
-  navigateOnHide: '',
-  createItem: null,
+  createDialogShown: false,
   fetchCatalogItems: helpers.noop,
-  navigateRequestClear: helpers.noop
+  navigateRequestClear: helpers.noop,
+  navigateTo: null
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -132,12 +129,11 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   ...state.catalog.catalogItems,
-  createShown: state.catalog.creatingInstance.shown,
-  createItem: state.catalog.creatingInstance.creatingItem,
-  navigateOnHide: state.catalog.navigateRequest.navigateTo
+  createDialogShown: state.catalog.createDialog.shown,
+  navigateTo: state.catalog.navigateRequest.navigateTo
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CatalogA);
+)(CatalogE);

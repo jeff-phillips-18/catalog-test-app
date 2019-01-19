@@ -2,11 +2,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import CatalogItemHeader from 'patternfly-react-extensions/dist/esm/components/CatalogItemHeader/CatalogItemHeader';
-import { Grid } from 'patternfly-react/dist/esm/components/Grid';
-import { Button } from 'patternfly-react/dist/esm/components/Button';
-import { Modal } from 'patternfly-react/dist/esm/components/Modal';
-import { ExpandCollapse } from 'patternfly-react/dist/esm/components/ExpandCollapse';
+import { CatalogItemHeader } from 'patternfly-react-extensions';
+import { Button, ExpandCollapse, Grid, Modal } from 'patternfly-react';
 
 import { getImageForIconClass } from '../../utils/catalogItemIcon';
 import {
