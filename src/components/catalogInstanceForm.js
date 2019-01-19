@@ -172,7 +172,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.volumeCapacity}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'volumeCapacity')}
             />
           )}
         </Form.FormGroup>
@@ -183,7 +183,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.gitRepo}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'gitRepo')}
             />
           )}
         </Form.FormGroup>
@@ -194,7 +194,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.gitRef}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'gitRef')}
             />
           )}
         </Form.FormGroup>
@@ -205,7 +205,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.contextDir}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'contextDir')}
             />
           )}
         </Form.FormGroup>
@@ -216,7 +216,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.startupProject}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'startupProject')}
             />
           )}
         </Form.FormGroup>
@@ -227,7 +227,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.sdkVersion}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'sdkVersion')}
             />
           )}
         </Form.FormGroup>
@@ -238,7 +238,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.startupAssembly}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'startupAssembly')}
             />
           )}
         </Form.FormGroup>
@@ -249,7 +249,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.npmTools}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'npmTools')}
             />
           )}
         </Form.FormGroup>
@@ -260,7 +260,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.testProjects}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'testProjects')}
             />
           )}
         </Form.FormGroup>
@@ -271,7 +271,7 @@ class CatalogInstanceForm extends React.Component {
               className="catalog-form-control"
               type="text"
               value={createItem.configuration}
-              onChange={e => this.onValueChange(e, 'memoryLimit')}
+              onChange={e => this.onValueChange(e, 'configuration')}
             />
           )}
         </Form.FormGroup>

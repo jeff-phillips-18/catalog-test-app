@@ -1,100 +1,10 @@
-/**
-  Third Party / Dependency imports here
-*/
-$font-path: './fonts/';
-$img-path: './imgs/';
-$icon-font-path: './fonts/';
 
-/**
-  Patternfly Sass
-*/
-@import 'patternfly';
-
-/**
-  Patternfly React Specific Sass Extensions
-*/
-@import 'patternfly-react';
-
-/**
-  Patternfly React Specific Sass Extensions
-*/
-@import 'patternfly-react-extensions';
-
-/**
-  Application Overrides
-*/
-
-//override navbar-default from React Bootstrap NavBar
-.navbar-default .navbar-toggle {
-  &:focus,
-  &:hover {
-    background-color: transparent;
-  }
-}
-
-.navbar-pf-vertical {
-  .nav .nav-item-iconic > .pficon-user {
-    padding-right: 7px;
-  }
-}
-
-.container-pf-nav-pf-vertical {
-  background: #f5f5f5;
-}
-
-a:hover,
-a:focus {
-  text-decoration: none;
-}
 
 .overview-list-icon {
   width: 50px;
 }
-
-.blank-slate-pf {
-  &.full-page-blank-slate {
-    border: none;
-    background-color: #fff;
-    border: none;
-    height: 100%;
-    margin: 0 -20px;
-  }
-}
 $catalog-item-icon-size-lg: 40px;
 $catalog-item-icon-size-sm: 24px;
-
-.catalog-tile-pf {
-  padding-bottom: 20px;
-}
-.catalog-item-icon {
-  padding-right: 10px;
-
-  &__icon {
-    font-size: $catalog-item-icon-size-sm;
-
-    &--large {
-      font-size: $catalog-item-icon-size-lg;
-    }
-  }
-
-  &__img {
-    max-height: $catalog-item-icon-size-sm;
-    max-width: $catalog-item-icon-size-sm;
-
-    &[src$=".svg"] {
-      height: $catalog-item-icon-size-sm;
-    }
-
-    &--large {
-      max-height: $catalog-item-icon-size-lg;
-      max-width: $catalog-item-icon-size-lg;
-
-      &[src$=".svg"] {
-        height: $catalog-item-icon-size-lg;
-      }
-    }
-  }
-}
 
 .catalog-page {
   background: #fff;
@@ -141,9 +51,15 @@ $catalog-item-icon-size-sm: 24px;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 60px);
+  .catalog-create-instance-form {
+    flex: 1;
+  }
 }
 
 .catalog-create-instance-dialog {
+  &.right-side-modal-pf .wizard-pf {
+    padding: 0;
+  }
   .modal-body {
     padding-bottom: 0;
   }
@@ -154,7 +70,6 @@ $catalog-item-icon-size-sm: 24px;
     }
   }
 }
-
 
 .catalog-modal__body {
   flex: 1;
@@ -176,10 +91,19 @@ $catalog-item-icon-size-sm: 24px;
     }
   }
 
+  &__wizard-description {
+    margin-bottom: 10px;
+  }
+
+  &__form-container label {
+    font-weight: 500;
+  }
+
   &__subscribe {
     margin-bottom: 20px;
     width: 100%;
   }
+
   &__footer {
     border-top: 1px solid $color-pf-black-200
   }

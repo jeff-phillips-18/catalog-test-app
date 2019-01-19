@@ -13,6 +13,8 @@ src/**/*.css
 # dependencies
 /node_modules
 
+/.cache-loader
+
 # testing
 /coverage
 
@@ -21,9 +23,9 @@ src/**/*.css
 
 # compiled patternfly assets
 src/css/*
-!src/css/.gitkeep 
+!src/css/.gitkeep
 src/img/*
-!src/img/.gitkeep 
+!src/img/.gitkeep
 src/fonts/*
 !src/fonts/.gitkeep
 src/sass/*

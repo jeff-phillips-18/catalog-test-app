@@ -62,6 +62,41 @@ const hideCreateCatalogInstance = () => dispatch => {
   );
 };
 
+const showCreateCatalogDialog = (item, wizard) => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.SHOW_CREATE_DIALOG,
+        item,
+        wizard
+      }),
+    10
+  );
+};
+
+const hideCreateCatalogDialog = () => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.HIDE_CREATE_DIALOG,
+        payload: { item: null }
+      }),
+    10
+  );
+};
+
+const setCreateWizardStepValid = (stepNum, valid) => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.SET_CREATE_WIZARD_STEP_VALID,
+        stepNum,
+        valid
+      }),
+    10
+  );
+};
+
 const navigateRequest = href => dispatch => {
   setTimeout(
     () =>
@@ -88,6 +123,8 @@ const catalogActions = {
   createCatalogInstance,
   showCreateCatalogInstance,
   hideCreateCatalogInstance,
+  showCreateCatalogDialog,
+  hideCreateCatalogDialog,
   navigateRequest,
   navigateRequestClear
 };
@@ -98,6 +135,9 @@ export {
   createCatalogInstance,
   showCreateCatalogInstance,
   hideCreateCatalogInstance,
+  showCreateCatalogDialog,
+  hideCreateCatalogDialog,
+  setCreateWizardStepValid,
   navigateRequest,
   navigateRequestClear
 };

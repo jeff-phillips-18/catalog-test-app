@@ -54,14 +54,11 @@ class Nav extends React.Component {
 
   navigateTo = path => {
     const { history, createShown } = this.props;
-    console.dir(this.props);
-    console.log(`CreateShown: ${createShown}`);
     if (createShown) {
       this.props.navigateRequest(path);
       return;
     }
 
-    console.log(`Pushing: ${path}`);
     history.push(path);
   };
 
