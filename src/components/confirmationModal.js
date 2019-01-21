@@ -20,16 +20,7 @@ class ConfirmationModal extends React.Component {
   };
 
   render() {
-    const {
-      show,
-      title,
-      heading,
-      body,
-      icon,
-      confirmButtonText,
-      cancelButtonText,
-      onConfirm
-    } = this.props;
+    const { show, title, heading, body, icon, confirmButtonText, cancelButtonText, onConfirm } = this.props;
 
     return (
       <MessageDialog

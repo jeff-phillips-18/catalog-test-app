@@ -75,11 +75,7 @@ class CatalogB extends React.Component {
       </div>
     );
 
-    return createShown ? (
-      <CreateInstance creatingItem={createItem} history={history} />
-    ) : (
-      catalogView
-    );
+    return createShown ? <CreateInstance creatingItem={createItem} history={history} /> : catalogView;
   }
 }
 

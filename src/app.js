@@ -4,7 +4,6 @@ import { withRouter } from 'react-router';
 import { routes } from './routes';
 
 import Nav from './components/nav';
-import { Page } from '@patternfly/react-core';
 
 class App extends React.Component {
   constructor(props) {

@@ -8,10 +8,7 @@ import { Alert } from 'patternfly-react/dist/esm/components/Alert';
 
 import CatalogView from '../../components/catalogView';
 import CreateInstance from '../createInstance/createInstance';
-import {
-  fetchCatalogItems,
-  navigateRequestClear
-} from '../../redux/actions/catalogActions';
+import { fetchCatalogItems, navigateRequestClear } from '../../redux/actions/catalogActions';
 import { helpers } from '../../common/helpers';
 
 class CatalogA extends React.Component {
@@ -73,9 +70,7 @@ class CatalogA extends React.Component {
       return this.renderPendingMessage();
     }
 
-    return (
-      <CatalogView history={history} noDetails catalogItems={catalogItems} />
-    );
+    return <CatalogView history={history} noDetails catalogItems={catalogItems} />;
   };
 
   render() {
@@ -90,11 +85,7 @@ class CatalogA extends React.Component {
       </div>
     );
 
-    return createShown ? (
-      <CreateInstance creatingItem={createItem} history={history} />
-    ) : (
-      catalogView
-    );
+    return createShown ? <CreateInstance creatingItem={createItem} history={history} /> : catalogView;
   }
 }
 

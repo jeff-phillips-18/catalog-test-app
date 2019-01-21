@@ -10,13 +10,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   connectRouter(history)(reduxReducers),
-  composeEnhancer(
-    applyMiddleware(
-      routerMiddleware(history),
-      thunkMiddleware,
-      promiseMiddleware()
-    )
-  )
+  composeEnhancer(applyMiddleware(routerMiddleware(history), thunkMiddleware, promiseMiddleware()))
 );
 
 const reloadReducers = () => {

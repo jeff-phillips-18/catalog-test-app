@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { HashRouter as Router } from 'react-router-dom';

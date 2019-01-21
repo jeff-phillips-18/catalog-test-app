@@ -47,8 +47,7 @@ CreateInstanceProgressiveStartupStep.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setCreateWizardStepValid: (stepNum, valid) =>
-    dispatch(setCreateWizardStepValid(stepNum, valid))
+  setCreateWizardStepValid: (stepNum, valid) => dispatch(setCreateWizardStepValid(stepNum, valid))
 });
 
 const mapStateToProps = state => ({

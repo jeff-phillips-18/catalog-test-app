@@ -27,9 +27,7 @@ const createCatalogInstance = item => dispatch => {
   setTimeout(
     () =>
       dispatch({
-        type: helpers.FULFILLED_ACTION(
-          catalogConstants.CREATE_CATALOG_INSTANCE
-        ),
+        type: helpers.FULFILLED_ACTION(catalogConstants.CREATE_CATALOG_INSTANCE),
         payload: {
           data: {
             item
@@ -84,6 +82,28 @@ const hideCreateCatalogDialog = () => dispatch => {
   );
 };
 
+const showCreateResultsDialog = item => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.SHOW_CREATE_RESULTS_DIALOG,
+        item
+      }),
+    10
+  );
+};
+
+const hideCreateResultsDialog = () => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: catalogConstants.HIDE_CREATE_RESULTS_DIALOG,
+        payload: { item: null }
+      }),
+    10
+  );
+};
+
 const setCreateWizardStepValid = (stepNum, valid) => dispatch => {
   setTimeout(
     () =>
@@ -124,6 +144,8 @@ const catalogActions = {
   hideCreateCatalogInstance,
   showCreateCatalogDialog,
   hideCreateCatalogDialog,
+  showCreateResultsDialog,
+  hideCreateResultsDialog,
   navigateRequest,
   navigateRequestClear
 };
@@ -136,6 +158,8 @@ export {
   hideCreateCatalogInstance,
   showCreateCatalogDialog,
   hideCreateCatalogDialog,
+  showCreateResultsDialog,
+  hideCreateResultsDialog,
   setCreateWizardStepValid,
   navigateRequest,
   navigateRequestClear

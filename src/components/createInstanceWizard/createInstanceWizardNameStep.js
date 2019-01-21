@@ -39,12 +39,7 @@ class CreateInstanceWizardNameStep extends React.Component {
         </div>
         <Grid fluid className="catalog-create-instance-form">
           <Form onSubmit={e => e.preventDefault()} horizontal>
-            <CreateInstanceNameForm
-              createItem={createItem}
-              validateForm={this.validateForm}
-              horizontal
-              labelSize={3}
-            />
+            <CreateInstanceNameForm createItem={createItem} validateForm={this.validateForm} horizontal labelSize={3} />
           </Form>
         </Grid>
       </React.Fragment>
@@ -63,8 +58,7 @@ CreateInstanceWizardNameStep.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setCreateWizardStepValid: (stepNum, valid) =>
-    dispatch(setCreateWizardStepValid(stepNum, valid))
+  setCreateWizardStepValid: (stepNum, valid) => dispatch(setCreateWizardStepValid(stepNum, valid))
 });
 
 const mapStateToProps = state => ({

@@ -59,9 +59,7 @@ class CatalogC extends React.Component {
       return this.renderPendingMessage();
     }
 
-    return (
-      <CatalogView history={history} dialogForm catalogItems={catalogItems} />
-    );
+    return <CatalogView history={history} dialogForm catalogItems={catalogItems} />;
   };
 
   render() {

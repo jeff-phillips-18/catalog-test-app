@@ -8,16 +8,10 @@ import { CatalogTile } from 'patternfly-react-extensions';
 import { Modal } from 'patternfly-react';
 
 import { helpers } from '../common/helpers';
-import { TileViewPage } from '../utils/tileViewPage';
+import { TileViewPage } from './tileViewPage';
 
-import {
-  showCreateCatalogInstance,
-  showCreateCatalogDialog
-} from '../redux/actions/catalogActions';
-import {
-  normalizeIconClass,
-  getImageForIconClass
-} from '../utils/catalogItemIcon';
+import { showCreateCatalogInstance, showCreateCatalogDialog } from '../redux/actions/catalogActions';
+import { normalizeIconClass, getImageForIconClass } from '../utils/catalogItemIcon';
 import CatalogItemDetailsDialog from '../components/catalogItemDetailsDialog';
 import CatalogItemCreateInstanceDialog from '../components/catalogItemCreateInstanceDialog';
 
@@ -197,8 +191,7 @@ const keywordCompare = (filterString, item) => {
 
   return (
     item.tileName.toLowerCase().includes(filterString) ||
-    (item.tileDescription &&
-      item.tileDescription.toLowerCase().includes(filterString)) ||
+    (item.tileDescription && item.tileDescription.toLowerCase().includes(filterString)) ||
     (item.tags && item.tags.includes(filterString))
   );
 };
@@ -218,7 +211,7 @@ class CatalogView extends React.Component {
     const { instanceCreated, createDialogShown } = this.props;
 
     if (instanceCreated && !prevProps.instanceCreated && !createDialogShown) {
-      console.log("PUSHING>>>>>");
+      console.log('PUSHING>>>>>');
       this.props.history.push('/');
     }
   }
@@ -270,9 +263,7 @@ class CatalogView extends React.Component {
 
   renderTile = item => {
     const { uid, name, imgUrl, provider, shortDescription } = item;
-    const iconClass = item.IconClass
-      ? `icon ${normalizeIconClass(item.conClass)}`
-      : null;
+    const iconClass = item.IconClass ? `icon ${normalizeIconClass(item.conClass)}` : null;
     const vendor = provider ? `provided by ${provider}` : null;
     return (
       <CatalogTile
@@ -290,12 +281,7 @@ class CatalogView extends React.Component {
 
   render() {
     const { catalogItems } = this.props;
-    const {
-      detailsItem,
-      showDetails,
-      showCreateInstance,
-      createItem
-    } = this.state;
+    const { detailsItem, showDetails, showCreateInstance, createItem } = this.state;
 
     return (
       <div className="catalog-page col-xs-12">
@@ -322,10 +308,7 @@ class CatalogView extends React.Component {
           )}
         {detailsItem &&
           showCreateInstance && (
-            <CatalogItemCreateInstanceDialog
-              detailsItem={createItem}
-              onClose={this.hideCreateItemInstance}
-            />
+            <CatalogItemCreateInstanceDialog detailsItem={createItem} onClose={this.hideCreateItemInstance} />
           )}
         {this.props.creatingInstance && (
           <Modal show bsSize="sm">
@@ -344,7 +327,6 @@ CatalogView.propTypes = {
   noDetails: PropTypes.bool,
   dialogForm: PropTypes.bool,
   wizardForm: PropTypes.bool,
-  progressiveForm: PropTypes.bool,
   createDialogShown: PropTypes.bool,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
@@ -360,7 +342,6 @@ CatalogView.defaultProps = {
   noDetails: false,
   dialogForm: false,
   wizardForm: false,
-  progressiveForm: false,
   showCreateCatalogInstance: helpers.noop,
   showCreateCatalogDialog: helpers.noop,
   createDialogShown: false
@@ -368,8 +349,7 @@ CatalogView.defaultProps = {
 
 const mapDispatchToProps = dispatch => ({
   showCreateCatalogInstance: item => dispatch(showCreateCatalogInstance(item)),
-  showCreateCatalogDialog: (item, wizard) =>
-    dispatch(showCreateCatalogDialog(item, wizard))
+  showCreateCatalogDialog: (item, wizard) => dispatch(showCreateCatalogDialog(item, wizard))
 });
 
 const mapStateToProps = state => ({

@@ -4,7 +4,6 @@ import CreateInstanceWizardPlanStep from './createInstanceWizardPlanStep';
 import CreateInstanceWizardContextStep from './createInstanceWizardContextStep';
 import CreateInstanceWizardStartupStep from './createInstanceWizardStartupStep';
 import CreateInstanceWizardToolsStep from './createInstanceWizardToolsStep';
-import CreateInstanceWizardResultsStep from './createInstanceWizardResultsStep';
 
 const createInstanceWizardSteps = [
   {
@@ -40,13 +39,6 @@ const createInstanceWizardSteps = [
     label: '5',
     title: 'Tools',
     page: <CreateInstanceWizardToolsStep />,
-    subSteps: []
-  },
-  {
-    step: 6,
-    label: '6',
-    title: 'Results',
-    page: <CreateInstanceWizardResultsStep />,
     subSteps: []
   }
 ];

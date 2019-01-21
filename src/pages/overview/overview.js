@@ -13,10 +13,7 @@ import CreateInstance from '../createInstance/createInstance';
 const action1 = rowNum => alert(`Action 1 executed on Row ${rowNum}`);
 const action2 = rowNum => alert(`Action 2 executed on Row ${rowNum}`);
 
-const rowActions = [
-  { label: 'Action 1', fn: action1 },
-  { label: 'Action 2', fn: action2 }
-];
+const rowActions = [{ label: 'Action 1', fn: action1 }, { label: 'Action 2', fn: action2 }];
 
 const renderActions = (actions, rowNum) => (
   <div>
@@ -55,22 +52,12 @@ const Overview = ({ catalogInstances, createShown, createItem, history }) => {
               <ListView.Item
                 key={index}
                 checkboxInput={<input type="checkbox" />}
-                leftContent={
-                  <img
-                    className="overview-list-icon"
-                    src={getImageForIconClass(imgUrl)}
-                    alt={name}
-                  />
-                }
+                leftContent={<img className="overview-list-icon" src={getImageForIconClass(imgUrl)} alt={name} />}
                 heading={name}
                 description={instanceName}
                 additionalInfo={[
-                  <ListView.InfoItem key="certifiedLevel">
-                    {certifiedLevel}
-                  </ListView.InfoItem>,
-                  <ListView.InfoItem key="healthIndex">
-                    {healthIndex}
-                  </ListView.InfoItem>,
+                  <ListView.InfoItem key="certifiedLevel">{certifiedLevel}</ListView.InfoItem>,
+                  <ListView.InfoItem key="healthIndex">{healthIndex}</ListView.InfoItem>,
                   <ListView.InfoItem key={version}>{version}</ListView.InfoItem>
                 ]}
                 actions={renderActions(rowActions, index)}
@@ -87,17 +74,13 @@ const Overview = ({ catalogInstances, createShown, createItem, history }) => {
         <EmptyState className="full-page-blank-slate">
           <EmptyState.Icon />
           <EmptyState.Title>No instances have been added</EmptyState.Title>
-          <EmptyState.Info>
-            Add Catalog or Marketplace items to show them in this view.
-          </EmptyState.Info>
+          <EmptyState.Info>Add Catalog or Marketplace items to show them in this view.</EmptyState.Info>
         </EmptyState>
       )}
     </div>
   );
 
-  const renderCreateInstance = () => (
-    <CreateInstance creatingItem={createItem} history={history} />
-  );
+  const renderCreateInstance = () => <CreateInstance creatingItem={createItem} history={history} />;
 
   return createShown ? renderCreateInstance() : renderOverview();
 };

@@ -80,27 +80,14 @@ class CatalogItemCreateInstanceDialog extends React.Component {
           {createItem.shortDescription}
           <h3>Create Catalog Instance</h3>
           <Grid fluid className="catalog-create-instance-form">
-            <CatalogInstanceForm
-              catalogItem={createItem}
-              onChange={this.updateCreateItem}
-              horizontal
-              labelSize={3}
-            />
+            <CatalogInstanceForm catalogItem={createItem} onChange={this.updateCreateItem} horizontal labelSize={3} />
           </Grid>
         </Modal.Body>
         <Modal.Footer className="catalog-modal__footer">
-          <Button
-            bsStyle="default"
-            className="btn-cancel"
-            onClick={this.closeDialog}
-          >
+          <Button bsStyle="default" className="btn-cancel" onClick={this.closeDialog}>
             Cancel
           </Button>
-          <Button
-            bsStyle="primary"
-            onClick={this.createInstance}
-            disabled={!createItemValid}
-          >
+          <Button bsStyle="primary" onClick={this.createInstance} disabled={!createItemValid}>
             Create Instance
           </Button>
         </Modal.Footer>
