@@ -33,9 +33,10 @@ class CreateInstanceProgressiveDialog extends React.Component {
       this.props.showCreateResultsDialog(creatingItem);
     }
 
-    if (this.buttonRef) {
+    if (this.buttonRef && this.movedForward) {
       const node = ReactDOM.findDOMNode(this.buttonRef);
       if (node) {
+        this.movedForward = false;
         node.scrollIntoView({ block: 'end', behavior: 'smooth' });
       }
     }
@@ -51,6 +52,7 @@ class CreateInstanceProgressiveDialog extends React.Component {
 
     if (activeStepIndex < numberSteps - 1) {
       this.setState({ activeStepIndex: activeStepIndex + 1 });
+      this.movedForward = true;
     }
   };
 
@@ -131,9 +133,7 @@ class CreateInstanceProgressiveDialog extends React.Component {
               })}
               <div
                 ref={ref => {
-                  if (activeStepIndex > 0) {
-                    this.buttonRef = ref;
-                  }
+                  this.buttonRef = ref;
                 }}
               >
                 {activeStepIndex < progressiveSteps.length - 1 && (
