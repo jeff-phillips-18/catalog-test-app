@@ -23,12 +23,7 @@ const MessageDialog = ({
   footer,
   ...props
 }) => (
-  <Modal
-    className={classNames('message-dialog-pf', className)}
-    show={show}
-    onHide={onHide}
-    {...props}
-  >
+  <Modal className={classNames('message-dialog-pf', className)} show={show} onHide={onHide} {...props}>
     <Modal.Header>
       <Modal.CloseButton onClick={onHide} />
       <Modal.Title>{title}</Modal.Title>
@@ -44,18 +39,11 @@ const MessageDialog = ({
       {!footer ? (
         <React.Fragment>
           {secondaryActionButtonContent && (
-            <Button
-              bsStyle={secondaryActionButtonBsStyle}
-              onClick={secondaryAction}
-            >
+            <Button bsStyle={secondaryActionButtonBsStyle} onClick={secondaryAction}>
               {secondaryActionButtonContent}
             </Button>
           )}
-          <Button
-            autoFocus
-            bsStyle={primaryActionButtonBsStyle}
-            onClick={primaryAction}
-          >
+          <Button autoFocus bsStyle={primaryActionButtonBsStyle} onClick={primaryAction}>
             {primaryActionButtonContent}
           </Button>
         </React.Fragment>

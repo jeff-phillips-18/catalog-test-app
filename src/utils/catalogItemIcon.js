@@ -178,19 +178,12 @@ export const normalizeIconClass = iconClass =>
 export const getImageForIconClass = iconClass => logos.get(iconClass);
 
 export const getServiceClassIcon = serviceClass =>
-  _.get(
-    serviceClass,
-    ['spec', 'externalMetadata', 'console.openshift.io/iconClass'],
-    'fa fa-clone'
-  );
+  _.get(serviceClass, ['spec', 'externalMetadata', 'console.openshift.io/iconClass'], 'fa fa-clone');
 
 export const getServiceClassImage = serviceClass => {
   const iconClass = getServiceClassIcon(serviceClass);
   const iconClassImg = getImageForIconClass(iconClass);
-  return (
-    _.get(serviceClass, ['spec', 'externalMetadata', 'imageUrl']) ||
-    iconClassImg
-  );
+  return _.get(serviceClass, ['spec', 'externalMetadata', 'imageUrl']) || iconClassImg;
 };
 
 export const getImageStreamIcon = tag => _.get(tag, 'annotations.iconClass');
@@ -202,10 +195,7 @@ export const ClusterServiceClassIcon = ({ serviceClass, iconSize }) => {
     <span className="co-catalog-item-icon">
       {imageUrl ? (
         <img
-          className={classNames(
-            'co-catalog-item-icon__img',
-            iconSize && `co-catalog-item-icon__img--${iconSize}`
-          )}
+          className={classNames('co-catalog-item-icon__img', iconSize && `co-catalog-item-icon__img--${iconSize}`)}
           src={imageUrl}
           alt={serviceClass}
         />
@@ -235,10 +225,7 @@ export const ImageStreamIcon = ({ tag, iconSize }) => {
     <span className="co-catalog-item-icon">
       {iconClassImg ? (
         <img
-          className={classNames(
-            'co-catalog-item-icon__img',
-            iconSize && `co-catalog-item-icon__img--${iconSize}`
-          )}
+          className={classNames('co-catalog-item-icon__img', iconSize && `co-catalog-item-icon__img--${iconSize}`)}
           src={iconClassImg}
           alt={tag}
         />

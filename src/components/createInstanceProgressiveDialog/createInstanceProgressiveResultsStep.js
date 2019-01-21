@@ -37,8 +37,7 @@ class CreateInstanceProgressiveResultsStep extends React.Component {
           />
         </div>
         <p>
-          <Icon type="pf" name="ok" /> Instance {createItem.instanceName} was
-          created successfully. Click
+          <Icon type="pf" name="ok" /> Instance {createItem.instanceName} was created successfully. Click
           {navButton}
           to view it now.
         </p>

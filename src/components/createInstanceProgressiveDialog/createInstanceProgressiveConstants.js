@@ -4,7 +4,6 @@ import CreateInstanceProgressivePlanStep from './createInstanceProgressivePlanSt
 import CreateInstanceProgressiveContextStep from './createInstanceProgressiveContextStep';
 import CreateInstanceProgressiveStartupStep from './createInstanceProgressiveStartupStep';
 import CreateInstanceProgressiveToolsStep from './createInstanceProgressiveToolsStep';
-import CreateInstanceProgressiveResultsStep from './createInstanceProgressiveResultsStep';
 
 const createInstanceProgressiveSteps = [
   {
@@ -40,13 +39,6 @@ const createInstanceProgressiveSteps = [
     label: '5',
     title: 'Tools',
     page: <CreateInstanceProgressiveToolsStep />,
-    subSteps: []
-  },
-  {
-    step: 6,
-    label: '6',
-    title: 'Results',
-    page: <CreateInstanceProgressiveResultsStep />,
     subSteps: []
   }
 ];

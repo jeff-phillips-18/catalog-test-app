@@ -5,14 +5,7 @@ import { confirmationModalConstants } from '../redux/constants';
 
 const noop = Function.prototype;
 
-const fakeNamespaces = [
-  'default',
-  'development',
-  'my-project',
-  'production',
-  'qa',
-  'test-project'
-];
+const fakeNamespaces = ['default', 'development', 'my-project', 'production', 'qa', 'test-project'];
 
 const defaultInstanceData = {
   instanceName: '',
@@ -66,17 +59,11 @@ const setStateProp = (prop, data, options) => {
   const obj = { ...state };
 
   if (!state[prop]) {
-    console.error(
-      `Error: Property ${prop} does not exist within the passed state.`,
-      state
-    );
+    console.error(`Error: Property ${prop} does not exist within the passed state.`, state);
   }
 
   if (reset && !initialState[prop]) {
-    console.warn(
-      `Warning: Property ${prop} does not exist within the passed initialState.`,
-      initialState
-    );
+    console.warn(`Warning: Property ${prop} does not exist within the passed initialState.`, initialState);
   }
 
   if (reset) {

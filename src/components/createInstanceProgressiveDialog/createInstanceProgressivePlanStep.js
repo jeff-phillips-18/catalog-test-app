@@ -14,10 +14,7 @@ class CreateInstanceProgressivePlanStep extends React.Component {
 
   validateForm = createItem => {
     const { plan, memoryLimit, volumeCapacity } = createItem;
-    this.props.setCreateWizardStepValid(
-      1,
-      !!plan && !!memoryLimit && !!volumeCapacity
-    );
+    this.props.setCreateWizardStepValid(1, !!plan && !!memoryLimit && !!volumeCapacity);
     this.forceUpdate();
   };
 
@@ -27,12 +24,7 @@ class CreateInstanceProgressivePlanStep extends React.Component {
     return (
       <Grid fluid className="catalog-create-instance-form">
         <Form onSubmit={e => e.preventDefault()} horizontal>
-          <CreateInstancePlanForm
-            createItem={createItem}
-            validateForm={this.validateForm}
-            horizontal
-            labelSize={3}
-          />
+          <CreateInstancePlanForm createItem={createItem} validateForm={this.validateForm} horizontal labelSize={3} />
         </Form>
       </Grid>
     );
@@ -50,8 +42,7 @@ CreateInstanceProgressivePlanStep.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setCreateWizardStepValid: (stepNum, valid) =>
-    dispatch(setCreateWizardStepValid(stepNum, valid))
+  setCreateWizardStepValid: (stepNum, valid) => dispatch(setCreateWizardStepValid(stepNum, valid))
 });
 
 const mapStateToProps = state => ({

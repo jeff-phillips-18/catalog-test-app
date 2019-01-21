@@ -6,10 +6,7 @@ import { CatalogItemHeader } from 'patternfly-react-extensions';
 import { Button, ExpandCollapse, Grid, Modal } from 'patternfly-react';
 
 import { getImageForIconClass } from '../../utils/catalogItemIcon';
-import {
-  createCatalogInstance,
-  hideCreateCatalogInstance
-} from '../../redux/actions/catalogActions';
+import { createCatalogInstance, hideCreateCatalogInstance } from '../../redux/actions/catalogActions';
 
 import CatalogInstanceForm from '../../components/catalogInstanceForm';
 import { helpers } from '../../common/helpers';
@@ -53,9 +50,7 @@ class CreateInstance extends React.Component {
     const { createItem } = this.state;
 
     if (!helpers.isDefaultInstance(createItem)) {
-      helpers.showCancelCreateInstanceConfirmation(() =>
-        this.props.hideCreateCatalogInstance(navigateTo)
-      );
+      helpers.showCancelCreateInstanceConfirmation(() => this.props.hideCreateCatalogInstance(navigateTo));
       return;
     }
 
@@ -72,11 +67,7 @@ class CreateInstance extends React.Component {
         </Modal.Header>
         <Modal.Body className="catalog-modal__body">
           <Grid fluid className="catalog-create-instance-form">
-            <CatalogInstanceForm
-              catalogItem={createItem}
-              onChange={this.updateCreateItem}
-              horizontal={false}
-            />
+            <CatalogInstanceForm catalogItem={createItem} onChange={this.updateCreateItem} horizontal={false} />
           </Grid>
           <div className="catalog-modal__item catalog-modal__description">
             <div className="catalog-modal__description__header">
@@ -100,18 +91,10 @@ class CreateInstance extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer className="catalog-modal__footer">
-          <Button
-            bsStyle="default"
-            className="btn-cancel"
-            onClick={this.onCancel}
-          >
+          <Button bsStyle="default" className="btn-cancel" onClick={this.onCancel}>
             Cancel
           </Button>
-          <Button
-            bsStyle="primary"
-            onClick={this.createInstance}
-            disabled={!createItemValid}
-          >
+          <Button bsStyle="primary" onClick={this.createInstance} disabled={!createItemValid}>
             Create Instance
           </Button>
         </Modal.Footer>

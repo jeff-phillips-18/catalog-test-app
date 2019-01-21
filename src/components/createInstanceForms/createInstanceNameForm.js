@@ -38,8 +38,7 @@ class CreateInstanceNameForm extends React.Component {
                     <MenuItem
                       key={nextNamespace}
                       className={{
-                        'catalog-dropdownselect-menuitem-selected':
-                          createItem.namespace === nextNamespace
+                        'catalog-dropdownselect-menuitem-selected': createItem.namespace === nextNamespace
                       }}
                       eventKey="1"
                       onClick={() => this.setNamespace(nextNamespace)}

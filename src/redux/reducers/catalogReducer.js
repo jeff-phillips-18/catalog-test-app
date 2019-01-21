@@ -28,6 +28,10 @@ const initialState = {
     creatingItem: null,
     validSteps: []
   },
+  createResultsDialog: {
+    shown: false,
+    createdItem: null
+  },
   navigateRequest: {
     navigateTo: ''
   }
@@ -139,15 +143,37 @@ const catalogReducer = (state = initialState, action) => {
         }
       );
 
-    case catalogConstants.SET_CREATE_WIZARD_STEP_VALID:
+    case catalogConstants.SHOW_CREATE_RESULTS_DIALOG:
       return helpers.setStateProp(
-        'createDialog',
-        getWizardStepUpdateState(state, action.stepNum, action.valid),
+        'createResultsDialog',
+        {
+          shown: true,
+          createdItem: action.item
+        },
         {
           state,
           initialState
         }
       );
+
+    case catalogConstants.HIDE_CREATE_RESULTS_DIALOG:
+      return helpers.setStateProp(
+        'createResultsDialog',
+        {
+          shown: false,
+          createdItem: null
+        },
+        {
+          state,
+          initialState
+        }
+      );
+
+    case catalogConstants.SET_CREATE_WIZARD_STEP_VALID:
+      return helpers.setStateProp('createDialog', getWizardStepUpdateState(state, action.stepNum, action.valid), {
+        state,
+        initialState
+      });
 
     case helpers.REJECTED_ACTION(catalogConstants.GET_CATLOG_ITEMS):
       return helpers.setStateProp(
@@ -221,10 +247,7 @@ const catalogReducer = (state = initialState, action) => {
       return helpers.setStateProp(
         'catalogInstances',
         {
-          catalogInstances: [
-            ...state.catalogInstances.catalogInstances,
-            action.payload.data.item
-          ],
+          catalogInstances: [...state.catalogInstances.catalogInstances, action.payload.data.item],
           pending: false,
           fulfilled: true
         },

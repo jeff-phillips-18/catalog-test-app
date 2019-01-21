@@ -16,9 +16,7 @@ const filterSubcategories = (category, item) => {
       values = [values];
     }
 
-    const intersection = [category.values, values].reduce((a, b) =>
-      a.filter(c => b.includes(c))
-    );
+    const intersection = [category.values, values].reduce((a, b) => a.filter(c => b.includes(c)));
     if (!_.isEmpty(intersection)) {
       return [category];
     }
@@ -34,14 +32,9 @@ const filterSubcategories = (category, item) => {
       values = [values];
     }
 
-    const valuesIntersection = [subCategory.values, values].reduce((a, b) =>
-      a.filter(c => b.includes(c))
-    );
+    const valuesIntersection = [subCategory.values, values].reduce((a, b) => a.filter(c => b.includes(c)));
     if (!_.isEmpty(valuesIntersection)) {
-      matchedSubcategories.push(
-        subCategory,
-        ...filterSubcategories(subCategory, item)
-      );
+      matchedSubcategories.push(subCategory, ...filterSubcategories(subCategory, item));
     }
   });
 
@@ -234,18 +227,10 @@ const filterItems = (items, filters, keywordCompare) => {
 
   // Intersection of individually applied filters is all filters
   // In the case no filters are active, returns items filteredByKeyword
-  return [..._.values(filteredByGroup), filteredByKeyword].reduce((a, b) =>
-    a.filter(c => b.includes(c))
-  );
+  return [..._.values(filteredByGroup), filteredByKeyword].reduce((a, b) => a.filter(c => b.includes(c)));
 };
 
-const recategorizeItems = (
-  items,
-  itemsSorter,
-  filters,
-  keywordCompare,
-  categories
-) => {
+const recategorizeItems = (items, itemsSorter, filters, keywordCompare, categories) => {
   const filteredItems = filterItems(items, filters, keywordCompare);
 
   const newCategories = _.cloneDeep(categories);
@@ -257,17 +242,14 @@ const recategorizeItems = (
   return newCategories;
 };
 
-const isActiveTab = (activeId, category) =>
-  _.has(category.subcategories, activeId);
+const isActiveTab = (activeId, category) => _.has(category.subcategories, activeId);
 
 const hasActiveDescendant = (activeId, category) => {
   if (_.has(category.subcategories, activeId)) {
     return true;
   }
 
-  return _.some(category.subcategories, subcategory =>
-    hasActiveDescendant(activeId, subcategory)
-  );
+  return _.some(category.subcategories, subcategory => hasActiveDescendant(activeId, subcategory));
 };
 
 const findActiveCategory = (activeId, categories) => {
@@ -323,9 +305,7 @@ const clearActiveFilters = (activeFilters, filterGroups) => {
 
   // Clear the group filters
   _.each(filterGroups, field => {
-    _.each(_.keys(activeFilters[field]), key =>
-      _.set(activeFilters, [field, key, 'active'], false)
-    );
+    _.each(_.keys(activeFilters[field]), key => _.set(activeFilters, [field, key, 'active'], false));
   });
 
   return activeFilters;
@@ -343,18 +323,9 @@ const getFilterGroupCounts = (
   // Filter only by keyword
   const filteredItems = filterByKeyword(items, filters, keywordCompare);
 
-  const categoriesForCounts = recategorizeItems(
-    filteredItems,
-    itemsSorter,
-    [],
-    keywordCompare,
-    categories
-  );
+  const categoriesForCounts = recategorizeItems(filteredItems, itemsSorter, [], keywordCompare, categories);
 
-  const activeCategory = findActiveCategory(
-    selectedCategoryId,
-    categoriesForCounts
-  );
+  const activeCategory = findActiveCategory(selectedCategoryId, categoriesForCounts);
   const activeItems = activeCategory ? activeCategory.items : [];
   const newFilterCounts = {};
 
@@ -365,9 +336,7 @@ const getFilterGroupCounts = (
         ..._.get(filters, [filterGroup, key, 'synonyms'], [])
       ];
 
-      const matchedItems = _.filter(activeItems, item =>
-        filterValues.includes(item[filterGroup])
-      );
+      const matchedItems = _.filter(activeItems, item => filterValues.includes(item[filterGroup]));
 
       _.set(newFilterCounts, [filterGroup, key], _.size(matchedItems));
     });
@@ -405,11 +374,7 @@ export class TileViewPage extends React.Component {
   componentDidMount() {
     const { items, filterGroups, getAvailableFilters } = this.props;
     const { categories } = this.state;
-    const availableFilters = getAvailableFilters(
-      defaultFilters,
-      items,
-      filterGroups
-    );
+    const availableFilters = getAvailableFilters(defaultFilters, items, filterGroups);
 
     if (_.size(items)) {
       this.setState({
@@ -424,26 +389,12 @@ export class TileViewPage extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { activeFilters, selectedCategoryId } = this.state;
-    const {
-      items,
-      itemsSorter,
-      filterGroups,
-      getAvailableCategories,
-      getAvailableFilters
-    } = this.props;
+    const { items, itemsSorter, filterGroups, getAvailableCategories, getAvailableFilters } = this.props;
 
     if (!_.isEqual(items, prevProps.items)) {
-      const availableFilters = getAvailableFilters(
-        defaultFilters,
-        items,
-        filterGroups
-      );
+      const availableFilters = getAvailableFilters(defaultFilters, items, filterGroups);
       const availableCategories = getAvailableCategories(items);
-      const categories = categorizeItems(
-        items,
-        itemsSorter,
-        availableCategories
-      );
+      const categories = categorizeItems(items, itemsSorter, availableCategories);
 
       const newActiveFilters = _.reduce(
         availableFilters,
@@ -467,11 +418,7 @@ export class TileViewPage extends React.Component {
       );
 
       this.updateMountedState({
-        ...this.getUpdatedState(
-          categories,
-          selectedCategoryId,
-          newActiveFilters
-        )
+        ...this.getUpdatedState(categories, selectedCategoryId, newActiveFilters)
       });
     }
   }
@@ -483,13 +430,7 @@ export class TileViewPage extends React.Component {
       return null;
     }
 
-    const newCategories = recategorizeItems(
-      items,
-      itemsSorter,
-      activeFilters,
-      keywordCompare,
-      categories
-    );
+    const newCategories = recategorizeItems(items, itemsSorter, activeFilters, keywordCompare, categories);
 
     return {
       activeFilters,
@@ -520,9 +461,7 @@ export class TileViewPage extends React.Component {
 
     const clearedFilters = clearActiveFilters(activeFilters, filterGroups);
 
-    this.updateMountedState(
-      this.getUpdatedState(categories, selectedCategoryId, clearedFilters)
-    );
+    this.updateMountedState(this.getUpdatedState(categories, selectedCategoryId, clearedFilters));
 
     this.filterByKeywordInput.focus();
   }
@@ -530,31 +469,20 @@ export class TileViewPage extends React.Component {
   selectCategory(categoryId) {
     const { activeFilters, categories } = this.state;
 
-    this.updateMountedState(
-      this.getUpdatedState(categories, categoryId, activeFilters)
-    );
+    this.updateMountedState(this.getUpdatedState(categories, categoryId, activeFilters));
   }
 
   onUpdateFilters(updatedFilters) {
     const { selectedCategoryId, categories } = this.state;
-    this.updateMountedState(
-      this.getUpdatedState(categories, selectedCategoryId, updatedFilters)
-    );
+    this.updateMountedState(this.getUpdatedState(categories, selectedCategoryId, updatedFilters));
   }
 
   onFilterChange(filterType, id, value) {
     const { activeFilters, selectedCategoryId, categories } = this.state;
 
-    const updatedFilters = updateActiveFilters(
-      activeFilters,
-      filterType,
-      id,
-      value
-    );
+    const updatedFilters = updateActiveFilters(activeFilters, filterType, id, value);
 
-    this.updateMountedState(
-      this.getUpdatedState(categories, selectedCategoryId, updatedFilters)
-    );
+    this.updateMountedState(this.getUpdatedState(categories, selectedCategoryId, updatedFilters));
   }
 
   onKeywordChange(value) {
@@ -566,9 +494,7 @@ export class TileViewPage extends React.Component {
     const active = id === selectedCategoryId;
     const shown = id === 'all';
 
-    const tabClasses = `text-capitalize${
-      !numItems ? ' co-catalog-tab__empty' : ''
-    }`;
+    const tabClasses = `text-capitalize${!numItems ? ' co-catalog-tab__empty' : ''}`;
     return (
       <VerticalTabs.Tab
         key={id}
@@ -580,13 +506,8 @@ export class TileViewPage extends React.Component {
         shown={shown}
       >
         {subcategories && (
-          <VerticalTabs
-            restrictTabs
-            activeTab={isActiveTab(selectedCategoryId, category)}
-          >
-            {_.map(subcategories, subcategory =>
-              this.renderTabs(subcategory, selectedCategoryId)
-            )}
+          <VerticalTabs restrictTabs activeTab={isActiveTab(selectedCategoryId, category)}>
+            {_.map(subcategories, subcategory => this.renderTabs(subcategory, selectedCategoryId))}
           </VerticalTabs>
         )}
       </VerticalTabs.Tab>
@@ -599,29 +520,17 @@ export class TileViewPage extends React.Component {
 
     return (
       <VerticalTabs restrictTabs activeTab={activeTab} shown="true">
-        {_.map(categories, category =>
-          this.renderTabs(category, selectedCategoryId)
-        )}
+        {_.map(categories, category => this.renderTabs(category, selectedCategoryId))}
       </VerticalTabs>
     );
   }
 
   // eslint-disable-next-line no-unused-vars
-  renderFilterGroup(
-    filterGroup,
-    groupName,
-    activeFilters,
-    filterCounts,
-    onFilterChange,
-    onUpdateFilters
-  ) {
+  renderFilterGroup(filterGroup, groupName, activeFilters, filterCounts, onFilterChange, onUpdateFilters) {
     const { filterGroupNameMap } = this.props;
 
     return (
-      <FilterSidePanel.Category
-        key={groupName}
-        title={filterGroupNameMap[groupName] || groupName}
-      >
+      <FilterSidePanel.Category key={groupName} title={filterGroupNameMap[groupName] || groupName}>
         {_.map(filterGroup, (filter, filterName) => {
           const { label, active } = filter;
           return (
@@ -629,9 +538,7 @@ export class TileViewPage extends React.Component {
               key={filterName}
               count={_.get(filterCounts, [groupName, filterName], 0)}
               checked={active}
-              onChange={e =>
-                onFilterChange(groupName, filterName, e.target.checked)
-              }
+              onChange={e => onFilterChange(groupName, filterName, e.target.checked)}
               title={label}
             >
               {label}
@@ -650,10 +557,7 @@ export class TileViewPage extends React.Component {
 
     return (
       <FilterSidePanel>
-        <FilterSidePanel.Category
-          key="keyword"
-          onSubmit={e => e.preventDefault()}
-        >
+        <FilterSidePanel.Category key="keyword" onSubmit={e => e.preventDefault()}>
           <FormControl
             type="text"
             inputRef={ref => {
@@ -687,21 +591,12 @@ export class TileViewPage extends React.Component {
     const { emptyStateTitle, emptyStateInfo } = this.props;
     return (
       <EmptyState className="co-catalog-page__no-filter-results">
-        <EmptyState.Title
-          className="co-catalog-page__no-filter-results-title"
-          aria-level="2"
-        >
+        <EmptyState.Title className="co-catalog-page__no-filter-results-title" aria-level="2">
           {emptyStateTitle}
         </EmptyState.Title>
-        <EmptyState.Info className="text-secondary">
-          {emptyStateInfo}
-        </EmptyState.Info>
+        <EmptyState.Info className="text-secondary">{emptyStateInfo}</EmptyState.Info>
         <EmptyState.Help>
-          <button
-            type="button"
-            className="btn btn-link"
-            onClick={() => this.clearFilters()}
-          >
+          <button type="button" className="btn btn-link" onClick={() => this.clearFilters()}>
             Clear All Filters
           </button>
         </EmptyState.Help>
@@ -710,7 +605,7 @@ export class TileViewPage extends React.Component {
   }
 
   render() {
-    const { renderTile, pageDescription } = this.props;
+    const { renderTile } = this.props;
     const { selectedCategoryId, categories } = this.state;
     let activeCategory = findActiveCategory(selectedCategoryId, categories);
     if (!activeCategory) {
@@ -730,9 +625,7 @@ export class TileViewPage extends React.Component {
         <div className="co-catalog-page__content">
           <div>
             <div className="catalog-page__heading">{activeCategory.label}</div>
-            <div className="catalog-page__num-items">
-              {activeCategory.numItems} items
-            </div>
+            <div className="catalog-page__num-items">{activeCategory.numItems} items</div>
           </div>
           {activeCategory.numItems > 0 && (
             <div className="catalog-tile-view-pf catalog-tile-view-pf-no-categories">
@@ -758,7 +651,6 @@ TileViewPage.propTypes = {
   renderFilterGroup: PropTypes.func,
   keywordCompare: PropTypes.func.isRequired,
   renderTile: PropTypes.func.isRequired,
-  pageDescription: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   emptyStateTitle: PropTypes.string,
   emptyStateInfo: PropTypes.string
 };
@@ -768,7 +660,6 @@ TileViewPage.defaultProps = {
   getAvailableFilters: determineAvailableFilters,
   filterGroupNameMap: {},
   renderFilterGroup: null,
-  pageDescription: null,
   emptyStateTitle: 'No Results Match the Filter Criteria',
   emptyStateInfo: 'No items are being shown due to the filters being applied.'
 };

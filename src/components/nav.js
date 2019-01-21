@@ -26,19 +26,10 @@ class Nav extends React.Component {
     const { routes } = this.props;
     const allRoutes = [];
     routes.map((item, index) => {
-      allRoutes.push(
-        <Route key={index} exact path={item.to} component={item.component} />
-      );
+      allRoutes.push(<Route key={index} exact path={item.to} component={item.component} />);
       if (item.subItems) {
         item.subItems.map((secondaryItem, subIndex) =>
-          allRoutes.push(
-            <Route
-              key={subIndex}
-              exact
-              path={secondaryItem.to}
-              component={secondaryItem.component}
-            />
-          )
+          allRoutes.push(<Route key={subIndex} exact path={secondaryItem.to} component={secondaryItem.component} />)
         );
       }
       return allRoutes;
@@ -67,9 +58,7 @@ class Nav extends React.Component {
 
     const vertNavItems = routes.map(item => {
       const active = location.pathname === item.to;
-      const subItemActive =
-        item.subItems &&
-        item.subItems.some(subItem => location.pathname === subItem.to);
+      const subItemActive = item.subItems && item.subItems.some(subItem => location.pathname === subItem.to);
       return (
         <VerticalNavItem
           key={item.to}
@@ -92,9 +81,7 @@ class Nav extends React.Component {
       );
     });
 
-    const dropdownComponentClass = props => (
-      <li className={props.className}>{props.children}</li>
-    );
+    const dropdownComponentClass = props => <li className={props.className}>{props.children}</li>;
 
     return (
       <React.Fragment>
@@ -103,11 +90,7 @@ class Nav extends React.Component {
             <VerticalNavBrand titleImg={pfBrand} iconImg={pfLogo} />
             <VerticalNavIconBar>
               <Dropdown componentClass={dropdownComponentClass} id="help">
-                <Dropdown.Toggle
-                  className="nav-item-iconic"
-                  bsStyle="link"
-                  noCaret
-                >
+                <Dropdown.Toggle className="nav-item-iconic" bsStyle="link" noCaret>
                   <Icon type="pf" name="help" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
@@ -117,8 +100,7 @@ class Nav extends React.Component {
               </Dropdown>
               <Dropdown componentClass={dropdownComponentClass} id="user">
                 <Dropdown.Toggle className="nav-item-iconic" bsStyle="link">
-                  <Icon type="pf" name="user" />{' '}
-                  <span className="dropdown-title">Brian Johnson</span>
+                  <Icon type="pf" name="user" /> <span className="dropdown-title">Brian Johnson</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <MenuItem eventKey="1">Preferences</MenuItem>

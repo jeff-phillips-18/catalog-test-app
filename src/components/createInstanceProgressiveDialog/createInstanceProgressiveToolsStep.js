@@ -24,12 +24,7 @@ class CreateInstanceProgressiveToolsStep extends React.Component {
     return (
       <Grid fluid className="catalog-create-instance-form">
         <Form onSubmit={e => e.preventDefault()} horizontal>
-          <CreateInstanceToolsForm
-            createItem={createItem}
-            validateForm={this.validateForm}
-            horizontal
-            labelSize={3}
-          />
+          <CreateInstanceToolsForm createItem={createItem} validateForm={this.validateForm} horizontal labelSize={3} />
         </Form>
       </Grid>
     );
@@ -47,8 +42,7 @@ CreateInstanceProgressiveToolsStep.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setCreateWizardStepValid: (stepNum, valid) =>
-    dispatch(setCreateWizardStepValid(stepNum, valid))
+  setCreateWizardStepValid: (stepNum, valid) => dispatch(setCreateWizardStepValid(stepNum, valid))
 });
 
 const mapStateToProps = state => ({

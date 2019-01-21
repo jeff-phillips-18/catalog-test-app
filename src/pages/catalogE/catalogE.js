@@ -7,12 +7,10 @@ import EmptyState from 'patternfly-react/dist/esm/components/EmptyState/EmptySta
 import { Alert } from 'patternfly-react/dist/esm/components/Alert';
 
 import CatalogView from '../../components/catalogView';
-import {
-  fetchCatalogItems,
-  navigateRequestClear
-} from '../../redux/actions/catalogActions';
+import { fetchCatalogItems, navigateRequestClear } from '../../redux/actions/catalogActions';
 import { helpers } from '../../common/helpers';
 import CreateInstanceProgressiveDialog from '../../components/createInstanceProgressiveDialog/createInstanceProgressiveDialog';
+import CatalogItemCreateResultsDialog from '../../components/catalogItemCreateResultsDialog';
 
 class CatalogE extends React.Component {
   componentDidMount() {
@@ -61,13 +59,7 @@ class CatalogE extends React.Component {
   };
 
   renderView = () => {
-    const {
-      error,
-      pending,
-      history,
-      catalogItems,
-      createDialogShown
-    } = this.props;
+    const { error, pending, history, catalogItems, createDialogShown } = this.props;
 
     if (error) {
       return this.renderError();
@@ -81,6 +73,7 @@ class CatalogE extends React.Component {
       <React.Fragment>
         <CatalogView history={history} wizardForm catalogItems={catalogItems} />
         <CreateInstanceProgressiveDialog show={createDialogShown} />
+        <CatalogItemCreateResultsDialog />
       </React.Fragment>
     );
   };
