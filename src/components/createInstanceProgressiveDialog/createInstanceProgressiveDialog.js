@@ -117,7 +117,7 @@ class CreateInstanceProgressiveDialog extends React.Component {
                   title={creatingItem.name}
                   vendor={`${creatingItem.version} provided by ${creatingItem.provider}`}
                 />
-                <h3>Description</h3>
+                <h2>Description</h2>
                 {creatingItem.shortDescription}
               </div>
               {progressiveSteps.map((step, stepIndex) => {
@@ -125,8 +125,8 @@ class CreateInstanceProgressiveDialog extends React.Component {
                   return null;
                 }
                 return (
-                  <div key={step.title}>
-                    <h3>{step.title}</h3>
+                  <div className="catalog-create-instance-step" key={step.title}>
+                    <h2>{step.title}</h2>
                     {progressiveSteps[stepIndex].page}
                   </div>
                 );
