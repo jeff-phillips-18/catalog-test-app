@@ -20,6 +20,7 @@ src/**/*.css
 
 # production
 /build
+/dist
 
 # compiled patternfly assets
 src/css/*

@@ -82,7 +82,7 @@ class CatalogD extends React.Component {
     return (
       <div>
         <div className="page-header">
-          <h1>Catalog C</h1>
+          <h1>Catalog D</h1>
         </div>
         {this.renderView()}
       </div>
